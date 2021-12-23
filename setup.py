@@ -24,13 +24,13 @@ def text_of(relpath):
 version = re.search(r'__version__ = "([^"]+)"', text_of("docx/__init__.py")).group(1)
 
 
-NAME = "python-docx"
+NAME = "docx-hitalent"
 VERSION = version
 DESCRIPTION = "Create and update Microsoft Word .docx files."
 KEYWORDS = "docx office openxml word"
-AUTHOR = "Steve Canny"
-AUTHOR_EMAIL = "python-docx@googlegroups.com"
-URL = "https://github.com/python-openxml/python-docx"
+AUTHOR = "Steve Canny + Guo hao Li"
+AUTHOR_EMAIL = "ghoullh@gmail.com"
+URL = "https://github.com/HiTalentAlgorithms/python-docx"
 LICENSE = text_of("LICENSE")
 PACKAGES = find_packages(exclude=["tests", "tests.*"])
 PACKAGE_DATA = {"docx": ["templates/*.xml", "templates/*.docx"]}

@@ -3,6 +3,13 @@
 Release History
 ---------------
 
+0.8.12 (2021-12-23)
++++++++++++++++++++
+
+- Add Textbox related classes
+- WD_COLOR add 'none' value
+
+
 0.8.11 (2021-05-15)
 +++++++++++++++++++
 

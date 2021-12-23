@@ -276,11 +276,12 @@ class ST_HpsMeasure(XsdUnsignedLong):
     """
     Half-point measure, e.g. 24.0 represents 12.0 points.
     """
+
     @classmethod
     def convert_from_xml(cls, str_value):
         if 'm' in str_value or 'n' in str_value or 'p' in str_value:
             return ST_UniversalMeasure.convert_from_xml(str_value)
-        return Pt(int(str_value)/2.0)
+        return Pt(int(str_value) / 2.0)
 
     @classmethod
     def convert_to_xml(cls, value):
@@ -407,3 +408,47 @@ class ST_VerticalAlignRun(XsdStringEnumeration):
     SUBSCRIPT = 'subscript'
 
     _members = (BASELINE, SUPERSCRIPT, SUBSCRIPT)
+
+
+class ST_Styles(BaseSimpleType):
+
+    @classmethod
+    def convert_from_xml(cls, str_value):
+        if not str_value:
+            return {}
+        styles = str_value.split(';')
+        return {style.split(':')[0].replace('-', '_'): style.split(':')[1] for style in styles if style}
+
+    @classmethod
+    def convert_to_xml(cls, value):
+        return ";".join([f"{k}:{v}" for k, v in value.items()])
+
+    @classmethod
+    def validate(cls, value):
+        if isinstance(value, dict):
+            return value
+        raise TypeError(
+            "value must be a dict, got %s" % type(value)
+        )
+
+
+class ST_CoordSize(BaseSimpleType):
+
+    @classmethod
+    def convert_from_xml(cls, str_value):
+        if not str_value:
+            return 1, 1
+        values = str_value.split(',')
+        return int(values[0]), int(values[1])
+
+    @classmethod
+    def convert_to_xml(cls, value):
+        return ",".join([str(x) for x in value])
+
+    @classmethod
+    def validate(cls, value):
+        if isinstance(value, tuple):
+            return value
+        raise TypeError(
+            "value must be a dict, got %s" % type(value)
+        )
