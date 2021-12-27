@@ -102,33 +102,34 @@ class CT_Pick(BaseOxmlElement):
     """
     group = ZeroOrOne('v:group')
     shape = ZeroOrOne('v:shape')
+    rect = ZeroOrOne('v:rect')
 
 
 class GroupBaseOxmlElement(BaseOxmlElement):
-    @property
+    @lazyproperty
     def parent(self):
         return self.getparent()
 
     @lazyproperty
     def position(self):
-        if isinstance(self.parent, self.__class__):
+        if isinstance(self.parent, GroupBaseOxmlElement):
             return self.stype.get('position') or self.parent.position
         return self.style.get('position') or 'absolute'
 
     @lazyproperty
     def mso_position_vertical_relative(self):
         # Vertical distance relative position
-        if isinstance(self.parent, self.__class__):
-            return self.stype.get('mso_position_vertical_relative') or self.parent.mso_position_vertical_relative
-        return self.style.get('mso_position_vertical_relative') or 'page'
+        if isinstance(self.parent, GroupBaseOxmlElement):
+            return self.style.get('mso_position_vertical_relative') or self.parent.mso_position_vertical_relative
+        return self.style.get('mso_position_vertical_relative') or 'paragraph'
 
     def _get_width_value(self, key):
         if value := self.style.get(key):
             if value.endswith('pt'):
                 return float(value[:-2])
             else:
-                if isinstance(self.parent, self.__class__):
-                    return float(value) * getattr(self.parent, key) / self.parent.coord_size[0]
+                if isinstance(self.parent, GroupBaseOxmlElement):
+                    return float(value) * self.parent.width / self.parent.coord_size[0]
                 else:
                     return 0
         else:
@@ -139,8 +140,8 @@ class GroupBaseOxmlElement(BaseOxmlElement):
             if value.endswith('pt'):
                 return float(value[:-2])
             else:
-                if isinstance(self.parent, self.__class__):
-                    return float(value) * getattr(self.parent, key) / self.parent.coord_size[1]
+                if isinstance(self.parent, GroupBaseOxmlElement):
+                    return float(value) * self.parent.height / self.parent.coord_size[1]
                 else:
                     return 0
         else:
@@ -171,15 +172,15 @@ class GroupBaseOxmlElement(BaseOxmlElement):
         return self._get_height_value('margin_top')
 
     @lazyproperty
-    def offset_x(self):
-        if isinstance(self.parent, self.__class__):
-            return self.left + self.parent.offset_x + self.parent.margin_left
+    def off_x(self):
+        if isinstance(self.parent, GroupBaseOxmlElement):
+            return self.left + self.parent.off_x + self.parent.margin_left
         return self.left
 
     @lazyproperty
-    def offset_y(self):
-        if isinstance(self.parent, self.__class__):
-            return self.top + self.parent.offset_y + self.parent.margin_top
+    def off_y(self):
+        if isinstance(self.parent, GroupBaseOxmlElement):
+            return self.top + self.parent.off_y + self.parent.margin_top
         return self.top
 
 
@@ -191,6 +192,16 @@ class CT_Group(GroupBaseOxmlElement):
     coord_size = OptionalAttribute('coordsize', ST_CoordSize)
     group = ZeroOrMore('v:group')
     shape = ZeroOrMore('v:shape')
+    rect = ZeroOrMore('v:rect')
+
+
+class CT_Rect(GroupBaseOxmlElement):
+    """
+    Used for ``v:rect``
+    """
+    style = RequiredAttribute('style', ST_Styles)
+    coord_size = OptionalAttribute('coordsize', ST_CoordSize)
+    textbox = ZeroOrOne('v:textbox')
 
 
 class CT_Shape(GroupBaseOxmlElement):
@@ -201,15 +212,36 @@ class CT_Shape(GroupBaseOxmlElement):
     coord_size = OptionalAttribute('coordsize', ST_CoordSize)
     textbox = ZeroOrOne('v:textbox')
 
+
 class CT_Textbox(BaseOxmlElement):
     """
     Used for ``v:textbox``
     """
     txbxContent = OneAndOnlyOne('w:txbxContent')
 
+
 class CT_TxbxContent(BaseOxmlElement):
     """
-    Used for ``v:txbxContent``
+    Used for ``w:txbxContent``
     """
     p = ZeroOrMore('w:p')
 
+    @lazyproperty
+    def shape(self):
+        return self.getparent().getparent()
+
+    @lazyproperty
+    def off_x(self):
+        return self.shape.off_x + self.shape.margin_left
+
+    @lazyproperty
+    def off_y(self):
+        return self.shape.off_y + self.shape.margin_top
+
+    @lazyproperty
+    def width(self):
+        return self.shape.width
+
+    @lazyproperty
+    def height(self):
+        return self.shape.height

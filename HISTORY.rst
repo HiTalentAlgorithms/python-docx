@@ -3,6 +3,15 @@
 Release History
 ---------------
 
+0.8.17 (2021-12-27)
++++++++++++++++++++
+
+- fix textbox oxml element
+- add textbox ProxyElement
+- fix CT_TxbxContent property
+- fix WD_COLOR
+
+
 0.8.12 (2021-12-23)
 +++++++++++++++++++
 

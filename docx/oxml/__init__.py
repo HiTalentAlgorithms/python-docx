@@ -247,8 +247,8 @@ register_element_cls('w:br', CT_Br)
 register_element_cls('w:r',  CT_R)
 register_element_cls('w:t',  CT_Text)
 
-from .text_box import CT_AlternateContent, CT_AC_Choice, CT_AC_Fallback, CT_Anchor, CT_Drawing, CT_PositionH, \
-    CT_PositionV, CT_Pick, CT_Group, CT_Shape, CT_Textbox, CT_TxbxContent  # noqa
+from .textbox import CT_AlternateContent, CT_AC_Choice, CT_AC_Fallback, CT_Anchor, CT_Drawing, CT_PositionH, \
+    CT_PositionV, CT_Pick, CT_Group, CT_Shape, CT_Textbox, CT_TxbxContent, CT_Rect  # noqa
 
 register_element_cls('mc:AlternateContent', CT_AlternateContent)
 register_element_cls('mc:Choice', CT_AC_Choice)
@@ -259,6 +259,7 @@ register_element_cls('wp:positionV', CT_PositionV)
 register_element_cls('mc:Fallback', CT_AC_Fallback)
 register_element_cls('w:pict', CT_Pick)
 register_element_cls('v:group', CT_Group)
+register_element_cls('v:rect', CT_Rect)
 register_element_cls('v:shape', CT_Shape)
 register_element_cls('v:textbox', CT_Textbox)
-register_element_cls('v:txbxContent', CT_TxbxContent)
+register_element_cls('w:txbxContent', CT_TxbxContent)

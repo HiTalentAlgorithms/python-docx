@@ -101,7 +101,7 @@ class WD_COLOR_INDEX(XmlEnumeration):
             None, None, None, 'Color is inherited from the style hierarchy.'
         ),
         XmlMappedEnumMember(
-            'none', None, None, 'Color is inherited from the style hierarchy.'
+            'none', None, 'none', 'Color is inherited from the style hierarchy.'
         ),
         XmlMappedEnumMember(
             'AUTO', 0, 'default', 'Automatic color. Default; usually black.'
