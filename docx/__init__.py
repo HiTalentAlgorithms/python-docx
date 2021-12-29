@@ -2,7 +2,7 @@
 
 from docx.api import Document  # noqa
 
-__version__ = "0.8.17"
+__version__ = "0.8.19"
 
 
 # register custom Part classes with opc package reader
@@ -33,6 +33,8 @@ PartFactory.part_type_for[CT.WML_HEADER] = HeaderPart
 PartFactory.part_type_for[CT.WML_NUMBERING] = NumberingPart
 PartFactory.part_type_for[CT.WML_SETTINGS] = SettingsPart
 PartFactory.part_type_for[CT.WML_STYLES] = StylesPart
+PartFactory.part_type_for[CT.WML_TEMPLATE_MAIN] = DocumentPart
+PartFactory.part_type_for[CT.WML_MACRO_ENABLED] = DocumentPart
 
 del (
     CT,

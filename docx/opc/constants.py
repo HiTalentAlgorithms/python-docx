@@ -280,6 +280,12 @@ class CONTENT_TYPE(object):
         'application/vnd.openxmlformats-officedocument.wordprocessingml.docu'
         'ment.main+xml'
     )
+    WML_TEMPLATE_MAIN = (
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.temp'
+        'late.main+xml')
+    WML_MACRO_ENABLED = (
+        'application/vnd.ms-word.document.macroEnabled.main+xml'
+    )
     WML_ENDNOTES = (
         'application/vnd.openxmlformats-officedocument.wordprocessingml.endn'
         'otes+xml'

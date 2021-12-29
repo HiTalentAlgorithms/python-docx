@@ -3,6 +3,13 @@
 Release History
 ---------------
 
+0.8.19 (2021-12-29)
++++++++++++++++++++
+
+- add WML_TEMPLATE_MAIN, WML_MACRO_ENABLED
+- textbox add coordorigin, fillcolor
+
+
 0.8.17 (2021-12-27)
 +++++++++++++++++++
 

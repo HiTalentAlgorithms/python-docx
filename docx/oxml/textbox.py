@@ -1,4 +1,4 @@
-from .simpletypes import XsdString, XsdBoolean, ST_Styles, ST_CoordSize
+from .simpletypes import XsdString, XsdBoolean, ST_Styles, ST_CoordSize, ST_CoordOrigin, ST_String
 from .xmlchemy import BaseOxmlElement, OneAndOnlyOne, RequiredAttribute, ZeroOrOne, ZeroOrMore, \
     OptionalAttribute
 from ..shared import Emu, lazyproperty
@@ -106,9 +106,26 @@ class CT_Pick(BaseOxmlElement):
 
 
 class GroupBaseOxmlElement(BaseOxmlElement):
+    style = RequiredAttribute('style', ST_Styles)
+    coord_size = OptionalAttribute('coordsize', ST_CoordSize)
+    coord_origin = OptionalAttribute('coordorigin', ST_CoordOrigin)
+    fillcolor = OptionalAttribute('fillcolor', ST_String)
+
     @lazyproperty
     def parent(self):
         return self.getparent()
+
+    @lazyproperty
+    def width_unit(self):
+        if self.coord_origin:
+            return self.coord_origin[0] + self.coord_size[0]
+        return self.coord_size[0]
+
+    @lazyproperty
+    def height_unit(self):
+        if self.coord_origin:
+            return self.coord_origin[1] + self.coord_size[1]
+        return self.coord_size[1]
 
     @lazyproperty
     def position(self):
@@ -121,7 +138,7 @@ class GroupBaseOxmlElement(BaseOxmlElement):
         # Vertical distance relative position
         if isinstance(self.parent, GroupBaseOxmlElement):
             return self.style.get('mso_position_vertical_relative') or self.parent.mso_position_vertical_relative
-        return self.style.get('mso_position_vertical_relative') or 'paragraph'
+        return self.style.get('mso_position_vertical_relative')
 
     def _get_width_value(self, key):
         if value := self.style.get(key):
@@ -129,7 +146,7 @@ class GroupBaseOxmlElement(BaseOxmlElement):
                 return float(value[:-2])
             else:
                 if isinstance(self.parent, GroupBaseOxmlElement):
-                    return float(value) * self.parent.width / self.parent.coord_size[0]
+                    return float(value) * self.parent.width / self.parent.width_unit
                 else:
                     return 0
         else:
@@ -141,7 +158,7 @@ class GroupBaseOxmlElement(BaseOxmlElement):
                 return float(value[:-2])
             else:
                 if isinstance(self.parent, GroupBaseOxmlElement):
-                    return float(value) * self.parent.height / self.parent.coord_size[1]
+                    return float(value) * self.parent.height / self.parent.height_unit
                 else:
                     return 0
         else:
@@ -165,10 +182,16 @@ class GroupBaseOxmlElement(BaseOxmlElement):
 
     @lazyproperty
     def margin_left(self):
+        position_horizontal = self.style.get('mso_position_horizontal')
+        if position_horizontal and position_horizontal != 'absolute':
+            return 0
         return self._get_width_value('margin_left')
 
     @lazyproperty
     def margin_top(self):
+        position_vertical = self.style.get('mso_position_vertical')
+        if position_vertical and position_vertical != 'absolute':
+            return 0
         return self._get_height_value('margin_top')
 
     @lazyproperty
@@ -188,8 +211,6 @@ class CT_Group(GroupBaseOxmlElement):
     """
     Used for ``v:group``
     """
-    style = RequiredAttribute('style', ST_Styles)
-    coord_size = OptionalAttribute('coordsize', ST_CoordSize)
     group = ZeroOrMore('v:group')
     shape = ZeroOrMore('v:shape')
     rect = ZeroOrMore('v:rect')
@@ -199,8 +220,6 @@ class CT_Rect(GroupBaseOxmlElement):
     """
     Used for ``v:rect``
     """
-    style = RequiredAttribute('style', ST_Styles)
-    coord_size = OptionalAttribute('coordsize', ST_CoordSize)
     textbox = ZeroOrOne('v:textbox')
 
 
@@ -208,8 +227,6 @@ class CT_Shape(GroupBaseOxmlElement):
     """
     Used for ``v:shape``
     """
-    style = RequiredAttribute('style', ST_Styles)
-    coord_size = OptionalAttribute('coordsize', ST_CoordSize)
     textbox = ZeroOrOne('v:textbox')
 
 

@@ -36,3 +36,7 @@ class TextboxContent(Parented):
     @property
     def relative_from(self):
         return self._txbxContent.shape.mso_position_vertical_relative
+
+    @property
+    def fillcolor(self):
+        return self._txbxContent.shape.fillcolor

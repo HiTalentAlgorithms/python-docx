@@ -452,3 +452,25 @@ class ST_CoordSize(BaseSimpleType):
         raise TypeError(
             "value must be a dict, got %s" % type(value)
         )
+
+
+class ST_CoordOrigin(BaseSimpleType):
+
+    @classmethod
+    def convert_from_xml(cls, str_value):
+        if not str_value:
+            return 0, 0
+        values = str_value.split(',')
+        return int(values[0]) if values[0] else 0, int(values[1]) if values[1] else 0
+
+    @classmethod
+    def convert_to_xml(cls, value):
+        return ",".join([str(x) for x in value])
+
+    @classmethod
+    def validate(cls, value):
+        if isinstance(value, tuple):
+            return value
+        raise TypeError(
+            "value must be a dict, got %s" % type(value)
+        )
