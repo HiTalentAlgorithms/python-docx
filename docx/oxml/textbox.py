@@ -117,12 +117,16 @@ class GroupBaseOxmlElement(BaseOxmlElement):
 
     @lazyproperty
     def width_unit(self):
+        if not self.coord_size:
+            return 12700
         if self.coord_origin:
             return self.coord_origin[0] + self.coord_size[0]
         return self.coord_size[0]
 
     @lazyproperty
     def height_unit(self):
+        if not self.coord_size:
+            return 12700
         if self.coord_origin:
             return self.coord_origin[1] + self.coord_size[1]
         return self.coord_size[1]
