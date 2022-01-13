@@ -12,7 +12,7 @@ from ..exceptions import InvalidSpanError
 from .ns import nsdecls, qn
 from ..shared import Emu, Twips
 from .simpletypes import (
-    ST_Merge, ST_TblLayoutType, ST_TblWidth, ST_TwipsMeasure, XsdInt
+    ST_Merge, ST_TblLayoutType, ST_TblWidth, ST_TwipsMeasure, XsdInt, ST_String
 )
 from .xmlchemy import (
     BaseOxmlElement, OneAndOnlyOne, OneOrMore, OptionalAttribute,
@@ -266,6 +266,13 @@ class CT_TblLayoutType(BaseOxmlElement):
     type = OptionalAttribute('w:type', ST_TblLayoutType)
 
 
+class CT_TblInd(BaseOxmlElement):
+    """
+    ``<w:tblInd>`` element
+    """
+    w = OptionalAttribute('w:w', ST_String)
+    type = OptionalAttribute('w:type', ST_TblWidth)
+
 class CT_TblPr(BaseOxmlElement):
     """
     ``<w:tblPr>`` element, child of ``<w:tbl>``, holds child elements that
@@ -282,6 +289,8 @@ class CT_TblPr(BaseOxmlElement):
     bidiVisual = ZeroOrOne('w:bidiVisual', successors=_tag_seq[4:])
     jc = ZeroOrOne('w:jc', successors=_tag_seq[8:])
     tblLayout = ZeroOrOne('w:tblLayout', successors=_tag_seq[13:])
+    tblInd = ZeroOrOne('w:tblInd')
+    tblW = ZeroOrOne('w:tblW')
     del _tag_seq
 
     @property

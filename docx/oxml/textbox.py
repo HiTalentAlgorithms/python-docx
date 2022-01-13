@@ -89,6 +89,13 @@ class CT_PositionV(BaseOxmlElement):
         return Emu(self.posOffset.text)
 
 
+class CT_WpsTxbx(BaseOxmlElement):
+    """
+    Used for ``wps:txbx``
+    """
+    txbxContent = OneAndOnlyOne('w:txbxContent')
+
+
 class CT_AC_Fallback(BaseOxmlElement):
     """
     Used for ``mc:Fallback``

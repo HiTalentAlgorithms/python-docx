@@ -244,6 +244,20 @@ class CT_ShapeProperties(BaseOxmlElement):
         xfrm = self.get_or_add_xfrm()
         xfrm.cy = value
 
+    @property
+    def ox(self):
+        xfrm = self.xfrm
+        if xfrm is None:
+            return 0
+        return xfrm.ox
+
+    @property
+    def oy(self):
+        xfrm = self.xfrm
+        if xfrm is None:
+            return 0
+        return xfrm.oy
+
 
 class CT_StretchInfoProperties(BaseOxmlElement):
     """
@@ -282,3 +296,17 @@ class CT_Transform2D(BaseOxmlElement):
     def cy(self, value):
         ext = self.get_or_add_ext()
         ext.cy = value
+
+    @property
+    def ox(self):
+        off = self.off
+        if off is None:
+            return 0
+        return off.x
+
+    @property
+    def oy(self):
+        off = self.off
+        if off is None:
+            return 0
+        return off.y

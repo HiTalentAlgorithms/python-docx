@@ -3,6 +3,13 @@
 Release History
 ---------------
 
+0.8.21 (2022-01-13)
++++++++++++++++++++
+
+- table and cell add some attrib
+- add PictureShape
+
+
 0.8.20 (2022-01-11)
 +++++++++++++++++++
 

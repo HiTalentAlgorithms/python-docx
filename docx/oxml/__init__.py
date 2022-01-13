@@ -163,6 +163,7 @@ from .table import (  # noqa
     CT_TrPr,
     CT_VMerge,
     CT_VerticalJc,
+    CT_TblInd,
 )
 register_element_cls('w:bidiVisual', CT_OnOff)
 register_element_cls('w:gridCol',    CT_TblGridCol)
@@ -175,11 +176,13 @@ register_element_cls('w:tblStyle',   CT_String)
 register_element_cls('w:tc',         CT_Tc)
 register_element_cls('w:tcPr',       CT_TcPr)
 register_element_cls('w:tcW',        CT_TblWidth)
+register_element_cls('w:tblW',       CT_TblWidth)
 register_element_cls('w:tr',         CT_Row)
 register_element_cls('w:trHeight',   CT_Height)
 register_element_cls('w:trPr',       CT_TrPr)
 register_element_cls('w:vAlign',     CT_VerticalJc)
 register_element_cls('w:vMerge',     CT_VMerge)
+register_element_cls('w:tblInd',     CT_TblInd)
 
 from .text.font import (  # noqa
     CT_Color,
@@ -248,7 +251,7 @@ register_element_cls('w:r',  CT_R)
 register_element_cls('w:t',  CT_Text)
 
 from .textbox import CT_AlternateContent, CT_AC_Choice, CT_AC_Fallback, CT_Anchor, CT_Drawing, CT_PositionH, \
-    CT_PositionV, CT_Pick, CT_Group, CT_Shape, CT_Textbox, CT_TxbxContent, CT_Rect  # noqa
+    CT_PositionV, CT_WpsTxbx, CT_Pick, CT_Group, CT_Shape, CT_Textbox, CT_TxbxContent, CT_Rect  # noqa
 
 register_element_cls('mc:AlternateContent', CT_AlternateContent)
 register_element_cls('mc:Choice', CT_AC_Choice)
@@ -256,6 +259,7 @@ register_element_cls('w:drawing', CT_Drawing)
 register_element_cls('wp:anchor', CT_Anchor)
 register_element_cls('wp:positionH', CT_PositionH)
 register_element_cls('wp:positionV', CT_PositionV)
+register_element_cls('wps:txbx', CT_WpsTxbx)
 register_element_cls('mc:Fallback', CT_AC_Fallback)
 register_element_cls('w:pict', CT_Pick)
 register_element_cls('v:group', CT_Group)

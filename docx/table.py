@@ -8,8 +8,10 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from .blkcntnr import BlockItemContainer
 from .enum.style import WD_STYLE_TYPE
+from .oxml import CT_Tc, CT_Tbl, nsmap
 from .oxml.simpletypes import ST_Merge
-from .shared import Inches, lazyproperty, Parented
+from .section import Section
+from .shared import Inches, lazyproperty, Parented, Twips
 
 
 class Table(Parented):
@@ -19,6 +21,45 @@ class Table(Parented):
     def __init__(self, tbl, parent):
         super(Table, self).__init__(parent)
         self._element = self._tbl = tbl
+
+    @lazyproperty
+    def indent(self):
+        base_indent = 0
+        if isinstance(self.parent_section, _Cell):
+            base_indent += Table(self.parent_section._tc._tbl, self._parent).indent
+        if self._tbl.tblPr.tblInd is not None and self._tbl.tblPr.tblInd.type == 'dxa':
+            return base_indent + Twips(int(self._tbl.tblPr.tblInd.w)).pt
+        return base_indent
+
+    @lazyproperty
+    def width(self):
+        if self._tblPr.tblW is not None:
+            if self._tblPr.tblW.type == 'dxa':
+                return self._tblPr.tblW.width.pt
+            elif self._tblPr.tblW.type == 'pct':
+                ratio = self._tblPr.tblW.w / 5000
+                if isinstance(self.parent_section, _Cell):
+                    return round(self.parent_section.real_width * ratio, 2)
+                elif isinstance(self.parent_section, Section):
+                    return round(self.parent_section.page_width.pt * ratio, 2)
+        return sum([x.width.pt for x in self.columns])
+
+    @lazyproperty
+    def parent_section(self):
+        parent = self._element.getparent()
+        while parent is not None:
+            if isinstance(parent, CT_Tc):
+                return _Cell(parent, self._parent)
+            else:
+                sectPr = parent.find('.//w:sectPr', nsmap)
+                if sectPr is not None:
+                    return Section(sectPr, self._parent)
+            parent = parent.getparent()
+        return None
+
+    @lazyproperty
+    def cell_widths(self):
+        return [x.w.pt for x in self._tbl.tblGrid.gridCol_lst]
 
     def add_column(self, width):
         """
@@ -79,14 +120,6 @@ class Table(Parented):
         """
         cell_idx = col_idx + (row_idx * self._column_count)
         return self._cells[cell_idx]
-
-    def column_cells(self, column_idx):
-        """
-        Sequence of cells in the column at *column_idx* in this table.
-        """
-        cells = self._cells
-        idxs = range(column_idx, len(cells), self._column_count)
-        return [cells[idx] for idx in idxs]
 
     @lazyproperty
     def columns(self):
@@ -297,6 +330,24 @@ class _Cell(BlockItemContainer):
     @width.setter
     def width(self, value):
         self._tc.width = value
+
+    @lazyproperty
+    def col_index(self):
+        return self._tc._tr.tc_lst.index(self._tc)
+
+    @lazyproperty
+    def current_table(self):
+        return Table(self._tc._tbl, self._parent)
+
+    @lazyproperty
+    def real_width(self):
+        if self._tc.tcPr.tcW is not None:
+            if self._tc.tcPr.tcW.type == 'dxa':
+                return self._tc.tcPr.tcW.width.pt
+            elif self._tc.tcPr.tcW.type == 'pct':
+                ratio = self._tc.tcPr.tcW.w / 5000
+                return round(self.current_table.width * ratio, 2)
+        return sum(self.current_table.cell_widths[self.col_index:self.col_index + self._tc.tcPr.grid_span])
 
 
 class _Column(Parented):
