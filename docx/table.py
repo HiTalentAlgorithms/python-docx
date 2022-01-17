@@ -8,7 +8,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from .blkcntnr import BlockItemContainer
 from .enum.style import WD_STYLE_TYPE
-from .oxml import CT_Tc, CT_Tbl, nsmap
+from .oxml import CT_Tc, nsmap
 from .oxml.simpletypes import ST_Merge
 from .section import Section
 from .shared import Inches, lazyproperty, Parented, Twips
@@ -449,7 +449,8 @@ class _Row(Parented):
         """
         Sequence of |_Cell| instances corresponding to cells in this row.
         """
-        return tuple(self.table.row_cells(self._index))
+        # return tuple(self.table.row_cells(self._index))
+        return (_Cell(tc, self) for tc in self._tr.tc_lst)
 
     @property
     def height(self):
