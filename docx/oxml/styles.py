@@ -5,7 +5,7 @@ Custom element classes related to the styles part
 """
 
 from ..enum.style import WD_STYLE_TYPE
-from .simpletypes import ST_DecimalNumber, ST_OnOff, ST_String
+from .simpletypes import ST_DecimalNumber, ST_OnOff, ST_String, ST_HexColor
 from .xmlchemy import (
     BaseOxmlElement, OptionalAttribute, RequiredAttribute, ZeroOrMore,
     ZeroOrOne
@@ -349,3 +349,11 @@ class CT_Styles(BaseOxmlElement):
         Generate each of the `w:style` child elements in document order.
         """
         return (style for style in self.xpath('w:style'))
+
+class CT_Shd(BaseOxmlElement):
+    """
+    ``<w:shd>`` element
+    """
+    val = OptionalAttribute('w:val', ST_String)
+    color = OptionalAttribute('w:color', ST_HexColor)
+    fill = OptionalAttribute('w:fill', ST_HexColor)

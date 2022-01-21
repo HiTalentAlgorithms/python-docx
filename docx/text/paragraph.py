@@ -143,3 +143,9 @@ class Paragraph(Parented):
         """
         p = self._p.add_p_before()
         return Paragraph(p, self._parent)
+
+    @property
+    def background_color(self):
+        if self._p.pPr is not None:
+            return self._p.pPr.background_color
+        return None

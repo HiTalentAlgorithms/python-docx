@@ -58,7 +58,14 @@ class CT_PPr(BaseOxmlElement):
     ind = ZeroOrOne('w:ind', successors=_tag_seq[23:])
     jc = ZeroOrOne('w:jc', successors=_tag_seq[27:])
     sectPr = ZeroOrOne('w:sectPr', successors=_tag_seq[35:])
+    shd = ZeroOrOne('w:shd')
     del _tag_seq
+
+    @property
+    def background_color(self):
+        if self.shd is not None:
+            return self.shd.fill
+        return None
 
     @property
     def first_line_indent(self):

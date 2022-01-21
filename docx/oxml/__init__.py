@@ -118,7 +118,8 @@ from .shape import (  # noqa
     CT_Point2D,
     CT_PositiveSize2D,
     CT_ShapeProperties,
-    CT_Transform2D,
+    CT_Transform2D, CT_Drawing, CT_Anchor, CT_WrapNone, CT_WrapSquare, CT_WrapThrough, CT_WrapTight,
+    CT_WrapTopAndBottom, CT_PositionH, CT_PositionV,
 )
 register_element_cls('a:blip',        CT_Blip)
 register_element_cls('a:ext',         CT_PositiveSize2D)
@@ -134,8 +135,18 @@ register_element_cls('pic:spPr',      CT_ShapeProperties)
 register_element_cls('wp:docPr',      CT_NonVisualDrawingProps)
 register_element_cls('wp:extent',     CT_PositiveSize2D)
 register_element_cls('wp:inline',     CT_Inline)
+register_element_cls('w:drawing', CT_Drawing)
+register_element_cls('wp:anchor', CT_Anchor)
+register_element_cls('wp:wrapNone', CT_WrapNone)
+register_element_cls('wp:wrapSquare', CT_WrapSquare)
+register_element_cls('wp:wrapThrough', CT_WrapThrough)
+register_element_cls('wp:wrapTight', CT_WrapTight)
+register_element_cls('wp:wrapTopAndBottom', CT_WrapTopAndBottom)
+register_element_cls('wp:positionH', CT_PositionH)
+register_element_cls('wp:positionV', CT_PositionV)
 
-from .styles import CT_LatentStyles, CT_LsdException, CT_Style, CT_Styles  # noqa
+
+from .styles import CT_LatentStyles, CT_LsdException, CT_Style, CT_Styles, CT_Shd  # noqa
 register_element_cls('w:basedOn',        CT_String)
 register_element_cls('w:latentStyles',   CT_LatentStyles)
 register_element_cls('w:locked',         CT_OnOff)
@@ -148,6 +159,7 @@ register_element_cls('w:style',          CT_Style)
 register_element_cls('w:styles',         CT_Styles)
 register_element_cls('w:uiPriority',     CT_DecimalNumber)
 register_element_cls('w:unhideWhenUsed', CT_OnOff)
+register_element_cls('w:shd',            CT_Shd)
 
 from .table import (  # noqa
     CT_Height,
@@ -250,15 +262,11 @@ register_element_cls('w:br', CT_Br)
 register_element_cls('w:r',  CT_R)
 register_element_cls('w:t',  CT_Text)
 
-from .textbox import CT_AlternateContent, CT_AC_Choice, CT_AC_Fallback, CT_Anchor, CT_Drawing, CT_PositionH, \
-    CT_PositionV, CT_WpsTxbx, CT_Pick, CT_Group, CT_Shape, CT_Textbox, CT_TxbxContent, CT_Rect  # noqa
+from .textbox import CT_AlternateContent, CT_AC_Choice, CT_AC_Fallback, CT_WpsTxbx, CT_Pick, CT_Group, CT_Shape, \
+    CT_Textbox, CT_TxbxContent, CT_Rect # noqa
 
 register_element_cls('mc:AlternateContent', CT_AlternateContent)
 register_element_cls('mc:Choice', CT_AC_Choice)
-register_element_cls('w:drawing', CT_Drawing)
-register_element_cls('wp:anchor', CT_Anchor)
-register_element_cls('wp:positionH', CT_PositionH)
-register_element_cls('wp:positionV', CT_PositionV)
 register_element_cls('wps:txbx', CT_WpsTxbx)
 register_element_cls('mc:Fallback', CT_AC_Fallback)
 register_element_cls('w:pict', CT_Pick)

@@ -8,12 +8,13 @@ from . import parse_xml
 from .ns import nsdecls
 from .simpletypes import (
     ST_Coordinate, ST_DrawingElementId, ST_PositiveCoordinate,
-    ST_RelationshipId, XsdString, XsdToken
+    ST_RelationshipId, XsdString, XsdToken, XsdBoolean
 )
 from .xmlchemy import (
     BaseOxmlElement, OneAndOnlyOne, OptionalAttribute, RequiredAttribute,
     ZeroOrOne
 )
+from ..shared import lazyproperty, Emu
 
 
 class CT_Blip(BaseOxmlElement):
@@ -56,6 +57,20 @@ class CT_Inline(BaseOxmlElement):
     extent = OneAndOnlyOne('wp:extent')
     docPr = OneAndOnlyOne('wp:docPr')
     graphic = OneAndOnlyOne('a:graphic')
+    wrapNone = ZeroOrOne('wp:wrapNone')
+    wrapSquare = ZeroOrOne('wp:wrapSquare')
+    wrapThrough = ZeroOrOne('wp:wrapThrough')
+    wrapTight = ZeroOrOne('wp:wrapTight')
+    wrapTopAndBottom = ZeroOrOne('wp:wrapTopAndBottom')
+
+    @property
+    def has_wrap(self):
+        if self.wrapNone:
+            return False
+        if self.wrapSquare or self.wrapThrough or self.wrapTight or self.wrapTopAndBottom:
+            return True
+        return False
+
 
     @classmethod
     def new(cls, cx, cy, shape_id, pic):
@@ -89,17 +104,103 @@ class CT_Inline(BaseOxmlElement):
     @classmethod
     def _inline_xml(cls):
         return (
-            '<wp:inline %s>\n'
-            '  <wp:extent cx="914400" cy="914400"/>\n'
-            '  <wp:docPr id="666" name="unnamed"/>\n'
-            '  <wp:cNvGraphicFramePr>\n'
-            '    <a:graphicFrameLocks noChangeAspect="1"/>\n'
-            '  </wp:cNvGraphicFramePr>\n'
-            '  <a:graphic>\n'
-            '    <a:graphicData uri="URI not set"/>\n'
-            '  </a:graphic>\n'
-            '</wp:inline>' % nsdecls('wp', 'a', 'pic', 'r')
+                '<wp:inline %s>\n'
+                '  <wp:extent cx="914400" cy="914400"/>\n'
+                '  <wp:docPr id="666" name="unnamed"/>\n'
+                '  <wp:cNvGraphicFramePr>\n'
+                '    <a:graphicFrameLocks noChangeAspect="1"/>\n'
+                '  </wp:cNvGraphicFramePr>\n'
+                '  <a:graphic>\n'
+                '    <a:graphicData uri="URI not set"/>\n'
+                '  </a:graphic>\n'
+                '</wp:inline>' % nsdecls('wp', 'a', 'pic', 'r')
         )
+
+
+class CT_Drawing(BaseOxmlElement):
+    """
+    Used for ``w:drawing``
+    """
+    anchor = OneAndOnlyOne('wp:anchor')
+
+
+class CT_Anchor(BaseOxmlElement):
+    """
+    Used for ``wp:anchor``
+    """
+    is_simplePos = RequiredAttribute('simplePos', XsdBoolean)
+    positionH = ZeroOrOne('wp:positionH')
+    positionV = ZeroOrOne('wp:positionV')
+    simplePos = ZeroOrOne('wp:simplePos')
+    graphic = OneAndOnlyOne('a:graphic')
+    wrapNone = ZeroOrOne('wp:wrapNone')
+    wrapSquare = ZeroOrOne('wp:wrapSquare')
+    wrapThrough = ZeroOrOne('wp:wrapThrough')
+    wrapTight = ZeroOrOne('wp:wrapTight')
+    wrapTopAndBottom = ZeroOrOne('wp:wrapTopAndBottom')
+
+    @property
+    def has_wrap(self):
+        if self.wrapNone is not None:
+            return False
+        if self.wrapSquare is not None or self.wrapThrough is not None or \
+                self.wrapTight is not None or self.wrapTopAndBottom is not None:
+            return True
+        return False
+
+
+class CT_WrapNone(BaseOxmlElement):
+    """
+    Used for ``wp:wrapNone``
+    """
+
+
+class CT_WrapSquare(BaseOxmlElement):
+    """
+    Used for ``wp:wrapSquare``
+    """
+
+
+class CT_WrapThrough(BaseOxmlElement):
+    """
+    Used for ``wp:wrapThrough``
+    """
+
+
+class CT_WrapTight(BaseOxmlElement):
+    """
+    Used for ``wp:wrapTight``
+    """
+
+
+class CT_WrapTopAndBottom(BaseOxmlElement):
+    """
+    Used for ``wp:wrapTopAndBottom``
+    """
+
+
+class CT_PositionH(BaseOxmlElement):
+    """
+    Used for ``wp:positionH``
+    """
+    relativeFrom = RequiredAttribute('relativeFrom', XsdString)
+    posOffset = OneAndOnlyOne('wp:posOffset')
+
+    @property
+    def value(self):
+        return Emu(self.posOffset.text)
+
+
+class CT_PositionV(BaseOxmlElement):
+    """
+    Used for ``wp:positionV``
+    """
+    relativeFrom = RequiredAttribute('relativeFrom', XsdString)
+    posOffset = OneAndOnlyOne('wp:posOffset')
+
+    @property
+    def value(self):
+        return Emu(self.posOffset.text)
 
 
 class CT_NonVisualDrawingProps(BaseOxmlElement):
@@ -126,6 +227,22 @@ class CT_Picture(BaseOxmlElement):
     blipFill = OneAndOnlyOne('pic:blipFill')
     spPr = OneAndOnlyOne('pic:spPr')
 
+    @lazyproperty
+    def parent(self):
+        return self.getparent().getparent().getparent()
+
+    @lazyproperty
+    def parent_off_x(self):
+        if hasattr(self.parent, 'positionH') and self.parent.positionH is not None:
+            return self.parent.positionH.value
+        return Emu(0)
+
+    @lazyproperty
+    def parent_off_y(self):
+        if hasattr(self.parent, 'positionV') and self.parent.positionV is not None:
+            return self.parent.positionV.value
+        return Emu(0)
+
     @classmethod
     def new(cls, pic_id, filename, rId, cx, cy):
         """
@@ -144,25 +261,25 @@ class CT_Picture(BaseOxmlElement):
     @classmethod
     def _pic_xml(cls):
         return (
-            '<pic:pic %s>\n'
-            '  <pic:nvPicPr>\n'
-            '    <pic:cNvPr id="666" name="unnamed"/>\n'
-            '    <pic:cNvPicPr/>\n'
-            '  </pic:nvPicPr>\n'
-            '  <pic:blipFill>\n'
-            '    <a:blip/>\n'
-            '    <a:stretch>\n'
-            '      <a:fillRect/>\n'
-            '    </a:stretch>\n'
-            '  </pic:blipFill>\n'
-            '  <pic:spPr>\n'
-            '    <a:xfrm>\n'
-            '      <a:off x="0" y="0"/>\n'
-            '      <a:ext cx="914400" cy="914400"/>\n'
-            '    </a:xfrm>\n'
-            '    <a:prstGeom prst="rect"/>\n'
-            '  </pic:spPr>\n'
-            '</pic:pic>' % nsdecls('pic', 'a', 'r')
+                '<pic:pic %s>\n'
+                '  <pic:nvPicPr>\n'
+                '    <pic:cNvPr id="666" name="unnamed"/>\n'
+                '    <pic:cNvPicPr/>\n'
+                '  </pic:nvPicPr>\n'
+                '  <pic:blipFill>\n'
+                '    <a:blip/>\n'
+                '    <a:stretch>\n'
+                '      <a:fillRect/>\n'
+                '    </a:stretch>\n'
+                '  </pic:blipFill>\n'
+                '  <pic:spPr>\n'
+                '    <a:xfrm>\n'
+                '      <a:off x="0" y="0"/>\n'
+                '      <a:ext cx="914400" cy="914400"/>\n'
+                '    </a:xfrm>\n'
+                '    <a:prstGeom prst="rect"/>\n'
+                '  </pic:spPr>\n'
+                '</pic:pic>' % nsdecls('pic', 'a', 'r')
         )
 
 

@@ -3,6 +3,20 @@
 Release History
 ---------------
 
+0.8.26 (2022-01-21)
++++++++++++++++++++
+
+- fix w:t missing text
+- Paragraphs and table cell add background color
+- Picture add wrap property
+
+
+0.8.24 (2022-01-18)
++++++++++++++++++++
+
+- fix image parent element offset
+
+
 0.8.22 (2022-01-17)
 +++++++++++++++++++
 

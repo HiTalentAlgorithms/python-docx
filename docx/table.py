@@ -349,6 +349,10 @@ class _Cell(BlockItemContainer):
                 return round(self.current_table.width * ratio, 2)
         return sum(self.current_table.cell_widths[self.col_index:self.col_index + self._tc.tcPr.grid_span])
 
+    @lazyproperty
+    def background_color(self):
+        return self._tc.tcPr.background_color
+
 
 class _Column(Parented):
     """

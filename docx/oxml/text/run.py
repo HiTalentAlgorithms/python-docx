@@ -90,7 +90,7 @@ class CT_R(BaseOxmlElement):
         text = ''
         for child in self:
             if child.tag == qn('w:t'):
-                t_text = child.text
+                t_text = "\n".join([_c for _c in child.itertext()])
                 text += t_text if t_text is not None else ''
             elif child.tag == qn('w:tab'):
                 text += '\t'

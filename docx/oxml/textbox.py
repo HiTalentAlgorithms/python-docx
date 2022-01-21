@@ -47,47 +47,6 @@ class CT_AC_Choice(BaseOxmlElement):
     drawing = OneAndOnlyOne('w:drawing')
 
 
-class CT_Drawing(BaseOxmlElement):
-    """
-    Used for ``w:drawing``
-    """
-    anchor = OneAndOnlyOne('wp:anchor')
-
-
-class CT_Anchor(BaseOxmlElement):
-    """
-    Used for ``wp:anchor``
-    """
-    is_simplePos = RequiredAttribute('simplePos', XsdBoolean)
-    positionH = ZeroOrOne('wp:positionH')
-    positionV = ZeroOrOne('wp:positionV')
-    simplePos = ZeroOrOne('wp:simplePos')
-    graphic = OneAndOnlyOne('a:graphic')
-
-
-class CT_PositionH(BaseOxmlElement):
-    """
-    Used for ``wp:positionH``
-    """
-    relativeFrom = RequiredAttribute('relativeFrom', XsdString)
-    posOffset = OneAndOnlyOne('wp:posOffset')
-
-    @property
-    def value(self):
-        return Emu(self.posOffset.text)
-
-
-class CT_PositionV(BaseOxmlElement):
-    """
-    Used for ``wp:positionV``
-    """
-    relativeFrom = RequiredAttribute('relativeFrom', XsdString)
-    posOffset = OneAndOnlyOne('wp:posOffset')
-
-    @property
-    def value(self):
-        return Emu(self.posOffset.text)
-
 
 class CT_WpsTxbx(BaseOxmlElement):
     """
