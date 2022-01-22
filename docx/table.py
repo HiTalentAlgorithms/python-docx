@@ -28,7 +28,7 @@ class Table(Parented):
         if isinstance(self.parent_section, _Cell):
             base_indent += Table(self.parent_section._tc._tbl, self._parent).indent
         if self._tbl.tblPr.tblInd is not None and self._tbl.tblPr.tblInd.type == 'dxa':
-            return base_indent + Twips(int(self._tbl.tblPr.tblInd.w)).pt
+            return base_indent + Twips(float(self._tbl.tblPr.tblInd.w)).pt
         return base_indent
 
     @lazyproperty

@@ -80,7 +80,7 @@ class CT_PPr(BaseOxmlElement):
         hanging = ind.hanging
         if hanging is not None:
             if not ind.left and not ind.right:
-                return Length(int(-hanging / 20))
+                return Length((-hanging / 20))
             return Length(-hanging)
         firstLine = ind.firstLine
         if firstLine is None:

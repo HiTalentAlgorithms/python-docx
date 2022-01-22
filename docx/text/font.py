@@ -22,6 +22,12 @@ class Font(ElementProxy):
     __slots__ = ()
 
     @property
+    def rPr(self):
+        if self._element is not None:
+            return self._element.rPr
+        return None
+
+    @property
     def all_caps(self):
         """
         Read/write. Causes text in this font to appear in capital letters.
@@ -49,7 +55,7 @@ class Font(ElementProxy):
         A |ColorFormat| object providing a way to get and set the text color
         for this font.
         """
-        return ColorFormat(self._element)
+        return ColorFormat(self._element) if self._element is not None else None
 
     @property
     def complex_script(self):
@@ -131,14 +137,14 @@ class Font(ElementProxy):
         A member of :ref:`WdColorIndex` indicating the color of highlighting
         applied, or `None` if no highlighting is applied.
         """
-        rPr = self._element.rPr
+        rPr = self.rPr
         if rPr is None:
             return None
         return rPr.highlight_val
 
     @highlight_color.setter
     def highlight_color(self, value):
-        rPr = self._element.get_or_add_rPr()
+        rPr = self.rPr
         rPr.highlight_val = value
 
     @property
@@ -186,7 +192,7 @@ class Font(ElementProxy):
         found. |None| indicates the typeface is inherited from the style
         hierarchy.
         """
-        rPr = self._element.rPr
+        rPr = self.rPr
         if rPr is None:
             return None
         return rPr.rFonts_ascii
@@ -263,14 +269,14 @@ class Font(ElementProxy):
             >> font.size.pt
             24.0
         """
-        rPr = self._element.rPr
+        rPr = self.rPr
         if rPr is None:
             return None
         return rPr.sz_val
 
     @size.setter
     def size(self, emu):
-        rPr = self._element.get_or_add_rPr()
+        rPr = self.get_or_add_rPr()
         rPr.sz_val = emu
 
     @property
@@ -334,7 +340,7 @@ class Font(ElementProxy):
         subscript. |None| indicates the subscript/subscript value is
         inherited from the style hierarchy.
         """
-        rPr = self._element.rPr
+        rPr = self.rPr
         if rPr is None:
             return None
         return rPr.subscript
@@ -351,7 +357,7 @@ class Font(ElementProxy):
         superscript. |None| indicates the subscript/superscript value is
         inherited from the style hierarchy.
         """
-        rPr = self._element.rPr
+        rPr = self.rPr
         if rPr is None:
             return None
         return rPr.superscript
@@ -371,7 +377,7 @@ class Font(ElementProxy):
         from :ref:`WdUnderline` are used to specify other outline styles such
         as double, wavy, and dotted.
         """
-        rPr = self._element.rPr
+        rPr = self.rPr
         if rPr is None:
             return None
         return rPr.u_val
@@ -398,7 +404,7 @@ class Font(ElementProxy):
         """
         Return the value of boolean child of `w:rPr` having *name*.
         """
-        rPr = self._element.rPr
+        rPr = self.rPr
         if rPr is None:
             return None
         return rPr._get_bool_val(name)

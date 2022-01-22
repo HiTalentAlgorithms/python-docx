@@ -128,6 +128,8 @@ class Run(Parented):
         no directly-applied character style. Setting this property to |None|
         removes any directly-applied character style.
         """
+        if self._r is None:
+            return None
         style_id = self._r.style
         return self.part.get_style(style_id, WD_STYLE_TYPE.CHARACTER)
 
@@ -156,6 +158,8 @@ class Run(Parented):
         ``\\r`` character to a ``<w:cr/>`` element. Any existing run content
         is replaced. Run formatting is preserved.
         """
+        if self._r is None:
+            return ''
         return self._r.text
 
     @text.setter
