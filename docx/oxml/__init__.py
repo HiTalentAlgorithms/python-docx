@@ -234,8 +234,12 @@ register_element_cls('w:vanish',     CT_OnOff)
 register_element_cls('w:vertAlign',  CT_VerticalAlignRun)
 register_element_cls('w:webHidden',  CT_OnOff)
 
-from .text.paragraph import CT_P  # noqa
+from .text.paragraph import CT_P, CT_Sdt, CT_SdtPr, CT_SdtContent  # noqa
 register_element_cls('w:p', CT_P)
+register_element_cls('w:sdt', CT_Sdt)
+register_element_cls('w:sdtPr', CT_SdtPr)
+register_element_cls('w:sdtContent', CT_SdtContent)
+
 
 from .text.parfmt import (  # noqa
     CT_Ind,
@@ -257,10 +261,12 @@ register_element_cls('w:tab',             CT_TabStop)
 register_element_cls('w:tabs',            CT_TabStops)
 register_element_cls('w:widowControl',    CT_OnOff)
 
-from .text.run import CT_Br, CT_R, CT_Text  # noqa
+from .text.run import CT_Br, CT_R, CT_Text, CT_Hyperlink  # noqa
 register_element_cls('w:br', CT_Br)
 register_element_cls('w:r',  CT_R)
 register_element_cls('w:t',  CT_Text)
+register_element_cls('w:hyperlink',  CT_Hyperlink)
+
 
 from .textbox import CT_AlternateContent, CT_AC_Choice, CT_AC_Fallback, CT_WpsTxbx, CT_Pick, CT_Group, CT_Shape, \
     CT_Textbox, CT_TxbxContent, CT_Rect # noqa

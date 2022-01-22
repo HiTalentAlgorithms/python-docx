@@ -8,6 +8,7 @@ specialized ones like structured document tags.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from docx.oxml.ns import qn
 from docx.oxml.table import CT_Tbl
 from docx.shared import Parented
 from docx.text.paragraph import Paragraph
@@ -56,7 +57,15 @@ class BlockItemContainer(Parented):
         A list containing the paragraphs in this container, in document
         order. Read-only.
         """
-        return [Paragraph(p, self) for p in self._element.p_lst]
+        paragraphs = []
+        for child in self._element:
+            if child.tag == qn('w:p'):
+                paragraphs.append(Paragraph(child, self))
+            elif child.tag == qn('w:sdt'):
+                for sdt_child in child.sdtContent:
+                    if sdt_child.tag == qn('w:p'):
+                        paragraphs.append(Paragraph(sdt_child, self))
+        return paragraphs
 
     @property
     def tables(self):

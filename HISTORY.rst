@@ -3,6 +3,13 @@
 Release History
 ---------------
 
+0.8.28 (2022-01-22)
++++++++++++++++++++
+
+- add w:hyperlink, w:sdt element
+- fix picture bug
+
+
 0.8.27 (2022-01-21)
 +++++++++++++++++++
 

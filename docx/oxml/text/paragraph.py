@@ -76,3 +76,24 @@ class CT_P(BaseOxmlElement):
     def style(self, style):
         pPr = self.get_or_add_pPr()
         pPr.style = style
+
+
+class CT_Sdt(BaseOxmlElement):
+    """
+    ``<w:sdt>`` element
+    """
+    sdtPr = ZeroOrOne('w:sdtPr')
+    sdtContent = ZeroOrOne('w:sdtContent')
+
+
+class CT_SdtPr(BaseOxmlElement):
+    """
+    ``<w:sdtPr>`` element
+    """
+
+
+class CT_SdtContent(BaseOxmlElement):
+    """
+    ``<w:sdtContent>`` element
+    """
+    p = ZeroOrMore('w:p')

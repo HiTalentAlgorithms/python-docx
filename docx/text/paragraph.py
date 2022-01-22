@@ -11,6 +11,8 @@ from __future__ import (
 from ..enum.style import WD_STYLE_TYPE
 from .parfmt import ParagraphFormat
 from .run import Run
+from ..oxml import CT_R
+from ..oxml.text.run import CT_Hyperlink
 from ..shared import Parented
 
 
@@ -90,7 +92,15 @@ class Paragraph(Parented):
         Sequence of |Run| instances corresponding to the <w:r> elements in
         this paragraph.
         """
-        return [Run(r, self) for r in self._p.r_lst]
+        runs = []
+        for child in self._p:
+            if isinstance(child, CT_R):
+                runs.append(Run(child, self))
+            elif isinstance(child, CT_Hyperlink):
+                for hyper_child in child:
+                    if isinstance(hyper_child, CT_R):
+                        runs.append(Run(hyper_child, self))
+        return runs
 
     @property
     def style(self):

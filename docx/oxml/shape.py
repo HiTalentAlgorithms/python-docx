@@ -184,11 +184,12 @@ class CT_PositionH(BaseOxmlElement):
     Used for ``wp:positionH``
     """
     relativeFrom = RequiredAttribute('relativeFrom', XsdString)
-    posOffset = OneAndOnlyOne('wp:posOffset')
+    posOffset = ZeroOrOne('wp:posOffset')
+    align = ZeroOrOne('wp:align')
 
     @property
     def value(self):
-        return Emu(self.posOffset.text)
+        return Emu(self.posOffset.text if self.posOffset is not None else 0)
 
 
 class CT_PositionV(BaseOxmlElement):
@@ -196,11 +197,12 @@ class CT_PositionV(BaseOxmlElement):
     Used for ``wp:positionV``
     """
     relativeFrom = RequiredAttribute('relativeFrom', XsdString)
-    posOffset = OneAndOnlyOne('wp:posOffset')
+    posOffset = ZeroOrOne('wp:posOffset')
+    align = ZeroOrOne('wp:align')
 
     @property
     def value(self):
-        return Emu(self.posOffset.text)
+        return Emu(self.posOffset.text if self.posOffset is not None else 0)
 
 
 class CT_NonVisualDrawingProps(BaseOxmlElement):

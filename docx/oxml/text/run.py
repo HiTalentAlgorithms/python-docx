@@ -5,7 +5,7 @@ Custom element classes related to text runs (CT_R).
 """
 
 from ..ns import qn
-from ..simpletypes import ST_BrClear, ST_BrType
+from ..simpletypes import ST_BrClear, ST_BrType, XsdString
 from ..xmlchemy import (
     BaseOxmlElement, OptionalAttribute, ZeroOrMore, ZeroOrOne
 )
@@ -164,3 +164,11 @@ class _RunContentAppender(object):
         if text:
             self._r.add_t(text)
         del self._bfr[:]
+
+
+class CT_Hyperlink(BaseOxmlElement):
+    """
+    ``<w:hyperlink>`` element
+    """
+    r = ZeroOrMore('w:r')
+    rId = OptionalAttribute('r:id', XsdString)
