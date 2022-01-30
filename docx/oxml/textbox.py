@@ -107,8 +107,9 @@ class GroupBaseOxmlElement(BaseOxmlElement):
     def mso_position_vertical_relative(self):
         # Vertical distance relative position
         if isinstance(self.parent, GroupBaseOxmlElement):
-            return self.style.get('mso_position_vertical_relative') or self.parent.mso_position_vertical_relative
-        return self.style.get('mso_position_vertical_relative')
+            return self.style.get('mso_position_vertical_relative') or self.style.get('mso_height_relative') or \
+                   self.parent.mso_position_vertical_relative
+        return self.style.get('mso_position_vertical_relative') or self.style.get('mso_height_relative')
 
     def _get_width_value(self, key):
         if value := self.style.get(key):
