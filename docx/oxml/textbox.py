@@ -104,12 +104,30 @@ class GroupBaseOxmlElement(BaseOxmlElement):
         return self.style.get('position') or 'absolute'
 
     @lazyproperty
+    def alternate(self):
+        parent = self.parent
+        while parent is not None:
+            if isinstance(parent,CT_AlternateContent):
+                return parent
+            parent = parent.getparent()
+        return None
+
+    @lazyproperty
+    def drawing_relative_from(self):
+        if self.alternate is not None:
+            try:
+                return self.alternate.choice.drawing.anchor.positionV.relativeFrom
+            except:
+                return None
+        return None
+
+    @lazyproperty
     def mso_position_vertical_relative(self):
         # Vertical distance relative position
         if isinstance(self.parent, GroupBaseOxmlElement):
-            return self.style.get('mso_position_vertical_relative') or self.style.get('mso_height_relative') or \
+            return self.style.get('mso_position_vertical_relative') or self.drawing_relative_from or \
                    self.parent.mso_position_vertical_relative
-        return self.style.get('mso_position_vertical_relative') or self.style.get('mso_height_relative')
+        return self.style.get('mso_position_vertical_relative') or self.drawing_relative_from
 
     def _get_width_value(self, key):
         if value := self.style.get(key):

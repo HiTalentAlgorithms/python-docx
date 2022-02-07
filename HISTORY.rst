@@ -3,6 +3,12 @@
 Release History
 ---------------
 
+0.8.30 (2022-02-07)
++++++++++++++++++++
+
+- fix textbox height relative, use Choice.drawing.anchor.positionV
+
+
 0.8.29 (2022-01-30)
 +++++++++++++++++++
 
