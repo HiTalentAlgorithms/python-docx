@@ -367,14 +367,14 @@ class CT_ShapeProperties(BaseOxmlElement):
     def ox(self):
         xfrm = self.xfrm
         if xfrm is None:
-            return 0
+            return Emu(0)
         return xfrm.ox
 
     @property
     def oy(self):
         xfrm = self.xfrm
         if xfrm is None:
-            return 0
+            return Emu(0)
         return xfrm.oy
 
 
@@ -420,12 +420,12 @@ class CT_Transform2D(BaseOxmlElement):
     def ox(self):
         off = self.off
         if off is None:
-            return 0
+            return Emu(0)
         return off.x
 
     @property
     def oy(self):
         off = self.off
         if off is None:
-            return 0
+            return Emu(0)
         return off.y
