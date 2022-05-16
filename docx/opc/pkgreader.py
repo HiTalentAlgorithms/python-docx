@@ -294,5 +294,6 @@ class _SerializedRelationships(object):
         if rels_item_xml is not None:
             rels_elm = parse_xml(rels_item_xml)
             for rel_elm in rels_elm.Relationship_lst:
-                srels._srels.append(_SerializedRelationship(baseURI, rel_elm))
+                if rel_elm.target_ref and "NULL" not in rel_elm.target_ref:
+                    srels._srels.append(_SerializedRelationship(baseURI, rel_elm))
         return srels
