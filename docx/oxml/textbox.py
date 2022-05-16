@@ -219,6 +219,12 @@ class CT_Shape(GroupBaseOxmlElement):
     textbox = ZeroOrOne('v:textbox')
 
 
+class CT_Oval(GroupBaseOxmlElement):
+    """
+    Used for ``v:oval``
+    """
+    textbox = ZeroOrOne('v:textbox')
+
 class CT_Textbox(BaseOxmlElement):
     """
     Used for ``v:textbox``

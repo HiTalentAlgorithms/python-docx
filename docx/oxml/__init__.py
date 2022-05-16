@@ -269,7 +269,7 @@ register_element_cls('w:hyperlink',  CT_Hyperlink)
 
 
 from .textbox import CT_AlternateContent, CT_AC_Choice, CT_AC_Fallback, CT_WpsTxbx, CT_Pick, CT_Group, CT_Shape, \
-    CT_Textbox, CT_TxbxContent, CT_Rect # noqa
+    CT_Textbox, CT_TxbxContent, CT_Rect, CT_Oval # noqa
 
 register_element_cls('mc:AlternateContent', CT_AlternateContent)
 register_element_cls('mc:Choice', CT_AC_Choice)
@@ -279,5 +279,6 @@ register_element_cls('w:pict', CT_Pick)
 register_element_cls('v:group', CT_Group)
 register_element_cls('v:rect', CT_Rect)
 register_element_cls('v:shape', CT_Shape)
+register_element_cls('v:oval', CT_Oval)
 register_element_cls('v:textbox', CT_Textbox)
 register_element_cls('w:txbxContent', CT_TxbxContent)
