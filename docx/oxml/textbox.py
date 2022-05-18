@@ -225,6 +225,13 @@ class CT_Oval(GroupBaseOxmlElement):
     """
     textbox = ZeroOrOne('v:textbox')
 
+
+class CT_Roundrect(GroupBaseOxmlElement):
+    """
+    Used for ``v:roundrect``
+    """
+    textbox = ZeroOrOne('v:textbox')
+
 class CT_Textbox(BaseOxmlElement):
     """
     Used for ``v:textbox``
