@@ -1,3 +1,4 @@
+from .oxml.textbox import GroupBaseOxmlElement
 from .shared import Parented
 from .text.paragraph import Paragraph
 
@@ -19,24 +20,37 @@ class TextboxContent(Parented):
 
     @property
     def off_x(self):
-        return self._txbxContent.off_x
+        if isinstance(self._txbxContent.shape, GroupBaseOxmlElement):
+            return self._txbxContent.off_x
+        return 0
 
     @property
     def off_y(self):
-        return self._txbxContent.off_y
+        if isinstance(self._txbxContent.shape, GroupBaseOxmlElement):
+            return self._txbxContent.off_y
+        return 0
 
     @property
     def width(self):
-        return self._txbxContent.width
+        if isinstance(self._txbxContent.shape, GroupBaseOxmlElement):
+            return self._txbxContent.width
+        return self.part.document.sections[0].page_width.pt
 
     @property
     def height(self):
-        return self._txbxContent.height
+        if isinstance(self._txbxContent.shape, GroupBaseOxmlElement):
+            return self._txbxContent.height
+        return 0
 
     @property
     def relative_from(self):
-        return self._txbxContent.shape.mso_position_vertical_relative
+        if isinstance(self._txbxContent.shape, GroupBaseOxmlElement):
+            return self._txbxContent.shape.mso_position_vertical_relative
+        else:
+            return "paragraph"
 
     @property
     def fillcolor(self):
-        return self._txbxContent.shape.fillcolor
+        if isinstance(self._txbxContent.shape, GroupBaseOxmlElement):
+            return self._txbxContent.shape.fillcolor
+        return None
