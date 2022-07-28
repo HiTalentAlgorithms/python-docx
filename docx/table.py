@@ -61,6 +61,16 @@ class Table(Parented):
     def cell_widths(self):
         return [x.w.pt for x in self._tbl.tblGrid.gridCol_lst]
 
+    @lazyproperty
+    def has_borders_line(self):
+        for attr in ('top', 'left', 'bottom', 'right'):
+            if self._tblPr.tblBorders is None:
+                continue
+            border = getattr(self._tblPr.tblBorders, attr)
+            if border is not None and border.val in ('nil', 'none'):
+                return False
+        return True
+
     def add_column(self, width):
         """
         Return a |_Column| object of *width*, newly added rightmost to the
@@ -353,6 +363,15 @@ class _Cell(BlockItemContainer):
     def background_color(self):
         return self._tc.tcPr.background_color
 
+    @lazyproperty
+    def has_borders_line(self):
+        for attr in ('top', 'left', 'bottom', 'right'):
+            if self._tc.tcPr.tcBorders is None:
+                continue
+            border = getattr(self._tc.tcPr.tcBorders, attr)
+            if border is not None and border.val in ('nil', 'none'):
+                return False
+        return True
 
 class _Column(Parented):
     """
@@ -523,3 +542,28 @@ class _Rows(Parented):
         Reference to the |Table| object this row collection belongs to.
         """
         return self._parent.table
+
+
+class TablePict(Parented):
+    """
+    Proxy class for a WordprocessingML ``<w:pict>`` element.
+    """
+    def __init__(self, pict, parent):
+        super(TablePict, self).__init__(parent)
+        self._element = self._pict = pict
+        self._oval = pict.oval
+
+    @lazyproperty
+    def rId(self):
+        if self._oval is not None and self._oval.fill is not None:
+            return self._oval.fill.rId
+        else:
+            return None
+
+    @lazyproperty
+    def width(self):
+        return self._oval.width
+
+    @lazyproperty
+    def height(self):
+        return self._oval.height

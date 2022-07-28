@@ -12,7 +12,7 @@ from ..exceptions import InvalidSpanError
 from .ns import nsdecls, qn
 from ..shared import Emu, Twips
 from .simpletypes import (
-    ST_Merge, ST_TblLayoutType, ST_TblWidth, ST_TwipsMeasure, XsdInt, ST_String
+    ST_Merge, ST_TblLayoutType, ST_TblWidth, ST_TwipsMeasure, XsdInt, ST_String, ST_HexColor, XsdLong
 )
 from .xmlchemy import (
     BaseOxmlElement, OneAndOnlyOne, OneOrMore, OptionalAttribute,
@@ -273,6 +273,66 @@ class CT_TblInd(BaseOxmlElement):
     w = OptionalAttribute('w:w', ST_String)
     type = OptionalAttribute('w:type', ST_TblWidth)
 
+
+class CT_BordersAttr(BaseOxmlElement):
+    """
+    ``<w:top> / <w:start> / <w:bottom> / <w:end> `` element
+    """
+    val = OptionalAttribute('w:val', ST_String)
+
+
+class CT_TblBorders(BaseOxmlElement):
+    """
+    ``<w:tblBorders>`` element
+    """
+    top = ZeroOrOne('w:top')
+    _start = ZeroOrOne('w:start')
+    _left = ZeroOrOne('w:left')
+    bottom = ZeroOrOne('w:bottom')
+    _end = ZeroOrOne('w:end')
+    _right = ZeroOrOne('w:right')
+    insideH = ZeroOrOne('w:insideH')
+    insideV = ZeroOrOne('w:insideV')
+
+    @property
+    def left(self):
+        if self._start is None:
+            return self._left
+        return self._start
+
+    @property
+    def right(self):
+        if self._end is None:
+            return self._right
+        return self._end
+
+
+class CT_TcBorders(BaseOxmlElement):
+    """
+    ``<w:tcBorders>`` element
+    """
+    top = ZeroOrOne('w:top')
+    _start = ZeroOrOne('w:start')
+    _left = ZeroOrOne('w:left')
+    bottom = ZeroOrOne('w:bottom')
+    _end = ZeroOrOne('w:end')
+    _right = ZeroOrOne('w:right')
+    insideH = ZeroOrOne('w:insideH')
+    insideV = ZeroOrOne('w:insideV')
+
+    @property
+    def left(self):
+        if self._start is None:
+            return self._left
+        return self._start
+
+    @property
+    def right(self):
+        if self._end is None:
+            return self._right
+        return self._end
+
+
 class CT_TblPr(BaseOxmlElement):
     """
     ``<w:tblPr>`` element, child of ``<w:tbl>``, holds child elements that
@@ -290,6 +350,7 @@ class CT_TblPr(BaseOxmlElement):
     jc = ZeroOrOne('w:jc', successors=_tag_seq[8:])
     tblLayout = ZeroOrOne('w:tblLayout', successors=_tag_seq[13:])
     tblInd = ZeroOrOne('w:tblInd')
+    tblBorders = ZeroOrOne('w:tblBorders')
     tblW = ZeroOrOne('w:tblW')
     del _tag_seq
 
@@ -772,6 +833,7 @@ class CT_TcPr(BaseOxmlElement):
     vMerge = ZeroOrOne('w:vMerge', successors=_tag_seq[5:])
     vAlign = ZeroOrOne('w:vAlign', successors=_tag_seq[12:])
     shd = ZeroOrOne('w:shd')
+    tcBorders = ZeroOrOne('w:tcBorders')
     del _tag_seq
 
     @property

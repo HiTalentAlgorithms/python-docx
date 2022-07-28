@@ -69,6 +69,7 @@ class CT_Pick(BaseOxmlElement):
     group = ZeroOrOne('v:group')
     shape = ZeroOrOne('v:shape')
     rect = ZeroOrOne('v:rect')
+    oval = ZeroOrOne('v:oval')
 
 
 class GroupBaseOxmlElement(BaseOxmlElement):
@@ -203,6 +204,7 @@ class CT_Group(GroupBaseOxmlElement):
     group = ZeroOrMore('v:group')
     shape = ZeroOrMore('v:shape')
     rect = ZeroOrMore('v:rect')
+    oval = ZeroOrOne('v:oval')
 
 
 class CT_Rect(GroupBaseOxmlElement):
@@ -224,6 +226,15 @@ class CT_Oval(GroupBaseOxmlElement):
     Used for ``v:oval``
     """
     textbox = ZeroOrOne('v:textbox')
+    fill = ZeroOrOne('v:fill')
+
+
+class CT_Fill(BaseOxmlElement):
+    """
+    Used for ``v:fill``
+    """
+    rId = OptionalAttribute('r:id', XsdString)
+    type = OptionalAttribute('type', XsdString)
 
 
 class CT_Roundrect(GroupBaseOxmlElement):

@@ -176,6 +176,9 @@ from .table import (  # noqa
     CT_VMerge,
     CT_VerticalJc,
     CT_TblInd,
+    CT_TcBorders,
+    CT_TblBorders,
+    CT_BordersAttr
 )
 register_element_cls('w:bidiVisual', CT_OnOff)
 register_element_cls('w:gridCol',    CT_TblGridCol)
@@ -195,6 +198,14 @@ register_element_cls('w:trPr',       CT_TrPr)
 register_element_cls('w:vAlign',     CT_VerticalJc)
 register_element_cls('w:vMerge',     CT_VMerge)
 register_element_cls('w:tblInd',     CT_TblInd)
+register_element_cls('w:top',        CT_BordersAttr)
+register_element_cls('w:start',     CT_BordersAttr)
+register_element_cls('w:left',     CT_BordersAttr)
+register_element_cls('w:bottom',     CT_BordersAttr)
+register_element_cls('w:end',     CT_BordersAttr)
+register_element_cls('w:right',     CT_BordersAttr)
+register_element_cls('w:tcBorders',     CT_TcBorders)
+register_element_cls('w:tblBorders',     CT_TblBorders)
 
 from .text.font import (  # noqa
     CT_Color,
@@ -269,7 +280,7 @@ register_element_cls('w:hyperlink',  CT_Hyperlink)
 
 
 from .textbox import CT_AlternateContent, CT_AC_Choice, CT_AC_Fallback, CT_WpsTxbx, CT_Pick, CT_Group, CT_Shape, \
-    CT_Textbox, CT_TxbxContent, CT_Rect, CT_Oval, CT_Roundrect # noqa
+    CT_Textbox, CT_TxbxContent, CT_Rect, CT_Oval, CT_Roundrect, CT_Fill # noqa
 
 register_element_cls('mc:AlternateContent', CT_AlternateContent)
 register_element_cls('mc:Choice', CT_AC_Choice)
@@ -280,6 +291,7 @@ register_element_cls('v:group', CT_Group)
 register_element_cls('v:rect', CT_Rect)
 register_element_cls('v:shape', CT_Shape)
 register_element_cls('v:oval', CT_Oval)
+register_element_cls('v:fill', CT_Fill)
 register_element_cls('v:roundrect', CT_Roundrect)
 register_element_cls('v:textbox', CT_Textbox)
 register_element_cls('w:txbxContent', CT_TxbxContent)

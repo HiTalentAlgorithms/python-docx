@@ -3,6 +3,12 @@
 Release History
 ---------------
 
+0.8.39 (2022-07-28)
++++++++++++++++++++
+
+- table add borders line check
+- add v:fill elements for table cell image
+
 0.8.38 (2022-07-21)
 +++++++++++++++++++
 
