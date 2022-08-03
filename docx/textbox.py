@@ -50,6 +50,20 @@ class TextboxContent(Parented):
             return "paragraph"
 
     @property
+    def vertical_relative_from(self):
+        if isinstance(self._txbxContent.shape, GroupBaseOxmlElement):
+            return self._txbxContent.shape.mso_position_vertical_relative
+        else:
+            return "paragraph"
+
+    @property
+    def horizontal_relative_from(self):
+        if isinstance(self._txbxContent.shape, GroupBaseOxmlElement):
+            return self._txbxContent.shape.mso_position_horizontal_relative
+        else:
+            return "paragraph"
+
+    @property
     def fillcolor(self):
         if isinstance(self._txbxContent.shape, GroupBaseOxmlElement):
             return self._txbxContent.shape.fillcolor

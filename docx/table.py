@@ -67,9 +67,9 @@ class Table(Parented):
             if self._tblPr.tblBorders is None:
                 continue
             border = getattr(self._tblPr.tblBorders, attr)
-            if border is not None and border.val in ('nil', 'none'):
-                return False
-        return True
+            if border is not None and border.val not in ('nil', 'none'):
+                return True
+        return False
 
     def add_column(self, width):
         """
@@ -369,9 +369,9 @@ class _Cell(BlockItemContainer):
             if self._tc.tcPr.tcBorders is None:
                 continue
             border = getattr(self._tc.tcPr.tcBorders, attr)
-            if border is not None and border.val in ('nil', 'none'):
-                return False
-        return True
+            if border is not None and border.val not in ('nil', 'none'):
+                return True
+        return False
 
 class _Column(Parented):
     """
