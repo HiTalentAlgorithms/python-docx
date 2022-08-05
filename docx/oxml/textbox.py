@@ -1,3 +1,4 @@
+from . import CT_Anchor
 from .simpletypes import XsdString, XsdBoolean, ST_Styles, ST_CoordSize, ST_CoordOrigin, ST_String
 from .xmlchemy import BaseOxmlElement, OneAndOnlyOne, RequiredAttribute, ZeroOrOne, ZeroOrMore, \
     OptionalAttribute
@@ -108,25 +109,43 @@ class GroupBaseOxmlElement(BaseOxmlElement):
     def alternate(self):
         parent = self.parent
         while parent is not None:
-            if isinstance(parent,CT_AlternateContent):
+            if isinstance(parent, CT_AlternateContent):
                 return parent
             parent = parent.getparent()
         return None
 
     @lazyproperty
-    def drawing_vertical_relative_from(self):
-        if self.alternate is not None:
+    def anchor(self):
+        parent = self.parent
+        while parent is not None:
+            if isinstance(parent, CT_Anchor):
+                return parent
+            parent = parent.getparent()
+        return None
+
+    @lazyproperty
+    def has_wrap(self):
+        if self.anchor is not None:
             try:
-                return self.alternate.choice.drawing.anchor.positionV.relativeFrom
+                return self.anchor.has_wrap
+            except:
+                return None
+        return None
+
+    @lazyproperty
+    def drawing_vertical_relative_from(self):
+        if self.anchor is not None:
+            try:
+                return self.anchor.positionV.relativeFrom
             except:
                 return None
         return None
 
     @lazyproperty
     def drawing_horizontal_relative_from(self):
-        if self.alternate is not None:
+        if self.anchor is not None:
             try:
-                return self.alternate.choice.drawing.anchor.positionH.relativeFrom
+                return self.anchor.positionH.relativeFrom
             except:
                 return None
         return None
@@ -275,6 +294,9 @@ class CT_TxbxContent(BaseOxmlElement):
 
     @lazyproperty
     def shape(self):
+        parent = self.getparent().getparent()
+        if parent is not None and parent.tag.endswith('wsp'):
+            return parent.getparent().getparent().getparent()
         return self.getparent().getparent()
 
     @lazyproperty

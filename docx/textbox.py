@@ -19,6 +19,10 @@ class TextboxContent(Parented):
         return [Paragraph(p, self) for p in self._txbxContent.p_lst]
 
     @property
+    def has_warp(self):
+        return self._txbxContent.shape.has_wrap
+
+    @property
     def off_x(self):
         if isinstance(self._txbxContent.shape, GroupBaseOxmlElement):
             return self._txbxContent.off_x

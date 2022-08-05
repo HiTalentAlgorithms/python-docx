@@ -139,7 +139,7 @@ class CT_Anchor(BaseOxmlElement):
     wrapTight = ZeroOrOne('wp:wrapTight')
     wrapTopAndBottom = ZeroOrOne('wp:wrapTopAndBottom')
 
-    @property
+    @lazyproperty
     def has_wrap(self):
         if self.wrapNone is not None:
             return False

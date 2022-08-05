@@ -99,9 +99,10 @@ class DocumentPart(BaseStoryPart):
         try:
             return self.part_related_by(RT.NUMBERING)
         except KeyError:
-            numbering_part = NumberingPart.new()
-            self.relate_to(numbering_part, RT.NUMBERING)
-            return numbering_part
+            return None
+            # numbering_part = NumberingPart.new()
+            # self.relate_to(numbering_part, RT.NUMBERING)
+            # return numbering_part
 
     def save(self, path_or_stream):
         """

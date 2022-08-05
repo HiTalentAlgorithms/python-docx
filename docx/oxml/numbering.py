@@ -6,7 +6,7 @@ Custom element classes related to the numbering part
 
 from . import OxmlElement
 from .shared import CT_DecimalNumber
-from .simpletypes import ST_DecimalNumber
+from .simpletypes import ST_DecimalNumber, ST_String
 from .xmlchemy import (
     BaseOxmlElement, OneAndOnlyOne, RequiredAttribute, ZeroOrMore, ZeroOrOne
 )
@@ -66,10 +66,18 @@ class CT_NumPr(BaseOxmlElement):
     A ``<w:numPr>`` element, a container for numbering properties applied to
     a paragraph.
     """
-    ilvl = ZeroOrOne('w:ilvl', successors=(
+    _ilvl = ZeroOrOne('w:ilvl', successors=(
         'w:numId', 'w:numberingChange', 'w:ins'
     ))
-    numId = ZeroOrOne('w:numId', successors=('w:numberingChange', 'w:ins'))
+    _numId = ZeroOrOne('w:numId', successors=('w:numberingChange', 'w:ins'))
+
+    @property
+    def ilvl(self):
+        return self._ilvl.val
+
+    @property
+    def numId(self):
+        return self._numId.val
 
     # @ilvl.setter
     # def _set_ilvl(self, val):
@@ -89,12 +97,44 @@ class CT_NumPr(BaseOxmlElement):
     #     numId.val = val
 
 
+class CT_Lvl(BaseOxmlElement):
+    """
+    ``<w:lvl>`` element
+    """
+    start = ZeroOrOne('w:start')
+    numFmt = ZeroOrOne('w:numFmt')
+    suff = ZeroOrOne('w:suff')
+    lvlText = ZeroOrOne('w:lvlText')
+    lvlJc = ZeroOrOne('w:lvlJc')
+    pPr = ZeroOrOne('w:pPr')
+    rPr = ZeroOrOne('w:rPr')
+    ilvl = RequiredAttribute('w:ilvl', ST_DecimalNumber)
+
+
+class CT_AbstractNum(BaseOxmlElement):
+    """
+    ``<w:abstractNum>`` element
+    """
+    nsid = ZeroOrOne('w:nsid')
+    multiLevelType = ZeroOrOne('w:multiLevelType')
+    tmpl = ZeroOrOne('w:tmpl')
+    lvl = ZeroOrMore('w:lvl')
+    abstractNumId = RequiredAttribute('w:abstractNumId', ST_DecimalNumber)
+
+    def get_lvl(self, ilvl):
+        for lvl in self.lvl_lst:
+            if lvl.ilvl == ilvl:
+                return lvl
+        return None
+
+
 class CT_Numbering(BaseOxmlElement):
     """
     ``<w:numbering>`` element, the root element of a numbering part, i.e.
     numbering.xml
     """
     num = ZeroOrMore('w:num', successors=('w:numIdMacAtCleanup',))
+    abstractNum = ZeroOrMore('w:abstractNum')
 
     def add_num(self, abstractNum_id):
         """

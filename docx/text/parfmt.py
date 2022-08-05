@@ -301,3 +301,9 @@ class ParagraphFormat(ElementProxy):
             if line == Twips(480):
                 return WD_LINE_SPACING.DOUBLE
         return lineRule
+
+    @property
+    def numbering(self):
+        if self._element.pPr is not None:
+            return self._element.pPr.numPr
+        return None
