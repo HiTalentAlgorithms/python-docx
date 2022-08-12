@@ -46,10 +46,10 @@ class NumberingPart(XmlPart):
                 numbering_map[num.numId] = abstract_num
         return numbering_map
 
-    def get_lvl(self, numId, ilvl):
-        numbering = self.numbering_map.get(numId)
+    def get_lvl(self, numPr):
+        numbering = self.numbering_map.get(numPr.numId)
         if numbering is not None:
-            lvl_ele = numbering.get_lvl(ilvl)
+            lvl_ele = numbering.get_lvl(numPr.ilvl)
             if lvl_ele is not None:
                 return AbstractNumberingLvl(lvl_ele)
         return None
@@ -61,7 +61,7 @@ class AbstractNumberingLvl:
     """
     def __init__(self, lvl_elm):
         self._lvl_elm = lvl_elm
-        self._index = int(lvl_elm.start.val) - 1
+        self._index = int(lvl_elm.start.val if lvl_elm.start is not None else 1) - 1
 
     def is_serial(self):
         if self._lvl_elm.numFmt.val == 'bullet':

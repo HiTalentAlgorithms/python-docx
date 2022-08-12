@@ -241,6 +241,11 @@ class Parented(object):
     def __init__(self, parent):
         super(Parented, self).__init__()
         self._parent = parent
+        self._element = None
+
+    @property
+    def element(self):
+        return self._element
 
     @property
     def part(self):

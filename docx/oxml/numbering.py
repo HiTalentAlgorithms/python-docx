@@ -73,11 +73,15 @@ class CT_NumPr(BaseOxmlElement):
 
     @property
     def ilvl(self):
-        return self._ilvl.val
+        if self._ilvl is not None:
+            return self._ilvl.val
+        return None
 
     @property
     def numId(self):
-        return self._numId.val
+        if self._numId is not None:
+            return self._numId.val
+        return None
 
     # @ilvl.setter
     # def _set_ilvl(self, val):
@@ -125,7 +129,7 @@ class CT_AbstractNum(BaseOxmlElement):
         for lvl in self.lvl_lst:
             if lvl.ilvl == ilvl:
                 return lvl
-        return None
+        return self.lvl_lst[0] if self.lvl_lst else None
 
 
 class CT_Numbering(BaseOxmlElement):

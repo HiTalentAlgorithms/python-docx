@@ -23,7 +23,7 @@ class Run(Parented):
     """
     def __init__(self, r, parent):
         super(Run, self).__init__(parent)
-        self._r = self._element = self.element = r
+        self._r = self._element = r
 
     def add_break(self, break_type=WD_BREAK.LINE):
         """
