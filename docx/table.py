@@ -351,6 +351,9 @@ class _Cell(BlockItemContainer):
 
     @lazyproperty
     def real_width(self):
+        if self._tc.tcPr is None:
+            return self.current_table.cell_widths[self.col_index]
+
         if self._tc.tcPr.tcW is not None:
             if self._tc.tcPr.tcW.type == 'dxa':
                 return self._tc.tcPr.tcW.width.pt
@@ -361,10 +364,14 @@ class _Cell(BlockItemContainer):
 
     @lazyproperty
     def background_color(self):
+        if self._tc.tcPr is None:
+            return None
         return self._tc.tcPr.background_color
 
     @lazyproperty
     def has_borders_line(self):
+        if self._tc.tcPr is None:
+            return False
         for attr in ('top', 'left', 'bottom', 'right'):
             if self._tc.tcPr.tcBorders is None:
                 continue
@@ -372,6 +379,7 @@ class _Cell(BlockItemContainer):
             if border is not None and border.val not in ('nil', 'none'):
                 return True
         return False
+
 
 class _Column(Parented):
     """
