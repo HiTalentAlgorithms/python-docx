@@ -1,6 +1,7 @@
-from .oxml import CT_Textbox, CT_WpsTxbx, nsmap
+from .oxml import CT_Textbox, CT_WpsTxbx, nsmap, CT_Inline, CT_P
 from .section import Section
 from .shared import lazyproperty, Parented
+from .text.paragraph import Paragraph
 from .textbox import TextboxContent
 
 
@@ -19,8 +20,20 @@ class PictureShape(Parented):
 
     @property
     def has_wrap(self):
-        if hasattr(self.parent,'has_wrap'):
+        if isinstance(self.parent, CT_Inline):
+            return True
+        if hasattr(self.parent, 'has_wrap'):
             return self.parent.has_wrap
+        return None
+
+    @property
+    def paragraph(self):
+        try:
+            if self.parent is not None and isinstance(self.parent.getparent().getparent().getparent(), CT_P):
+                p_ = self.parent.getparent().getparent().getparent()
+                return Paragraph(p_, self._parent)
+        except:
+            return None
         return None
 
     @property

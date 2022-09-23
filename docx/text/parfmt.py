@@ -281,9 +281,11 @@ class ParagraphFormat(ElementProxy):
         """
         if spacing_line is None:
             return None
-        if spacing_lineRule == WD_LINE_SPACING.MULTIPLE:
-            return spacing_line / Pt(12)
-        return spacing_line
+
+        # if spacing_lineRule == WD_LINE_SPACING.MULTIPLE:
+        #     return Pt(spacing_line / Pt(12))
+        # return spacing_line
+        return Pt(spacing_line / Pt(12))
 
     @staticmethod
     def _line_spacing_rule(line, lineRule):

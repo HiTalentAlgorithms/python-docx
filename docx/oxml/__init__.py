@@ -102,6 +102,7 @@ from .section import (  # noqa
     CT_PageSz,
     CT_SectPr,
     CT_SectType,
+    CT_Cols,
 )
 register_element_cls("w:footerReference", CT_HdrFtrRef)
 register_element_cls("w:ftr", CT_HdrFtr)
@@ -109,6 +110,7 @@ register_element_cls("w:hdr", CT_HdrFtr)
 register_element_cls("w:headerReference", CT_HdrFtrRef)
 register_element_cls("w:pgMar", CT_PageMar)
 register_element_cls("w:pgSz", CT_PageSz)
+register_element_cls("w:cols", CT_Cols)
 register_element_cls("w:sectPr", CT_SectPr)
 register_element_cls("w:type", CT_SectType)
 

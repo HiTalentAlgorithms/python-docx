@@ -7,7 +7,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from copy import deepcopy
 
 from docx.enum.section import WD_HEADER_FOOTER, WD_ORIENTATION, WD_SECTION_START
-from docx.oxml.simpletypes import ST_SignedTwipsMeasure, ST_TwipsMeasure, XsdString
+from docx.oxml.simpletypes import ST_SignedTwipsMeasure, ST_TwipsMeasure, XsdString, ST_DecimalNumber
 from docx.oxml.xmlchemy import (
     BaseOxmlElement,
     OptionalAttribute,
@@ -55,6 +55,14 @@ class CT_PageSz(BaseOxmlElement):
     )
 
 
+class CT_Cols(BaseOxmlElement):
+    """
+    ``<w:cols>`` element
+    """
+    num = OptionalAttribute('w:num', ST_DecimalNumber)
+    space = OptionalAttribute('w:space', ST_TwipsMeasure)
+
+
 class CT_SectPr(BaseOxmlElement):
     """`w:sectPr` element, the container element for section properties"""
 
@@ -70,6 +78,7 @@ class CT_SectPr(BaseOxmlElement):
     pgSz = ZeroOrOne("w:pgSz", successors=_tag_seq[4:])
     pgMar = ZeroOrOne("w:pgMar", successors=_tag_seq[5:])
     titlePg = ZeroOrOne("w:titlePg", successors=_tag_seq[14:])
+    cols = ZeroOrOne('w:cols')
     del _tag_seq
 
     def add_footerReference(self, type_, rId):
@@ -300,6 +309,8 @@ class CT_SectPr(BaseOxmlElement):
         """
         type = self.type
         if type is None or type.val is None:
+            if self.cols is not None:
+                return WD_SECTION_START.CONTINUOUS
             return WD_SECTION_START.NEW_PAGE
         return type.val
 
