@@ -192,9 +192,10 @@ class XmlEnumeration(Enumeration):
         *xml_val*.
         """
         if xml_val not in cls._xml_to_member:
-            raise InvalidXmlError(
-                "attribute value '%s' not valid for this type" % xml_val
-            )
+            # raise InvalidXmlError(
+            #     "attribute value '%s' not valid for this type" % xml_val
+            # )
+            return None
         return cls._xml_to_member[xml_val]
 
     @classmethod

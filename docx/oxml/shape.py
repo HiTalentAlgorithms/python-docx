@@ -41,6 +41,10 @@ class CT_GraphicalObject(BaseOxmlElement):
     """
     graphicData = OneAndOnlyOne('a:graphicData')
 
+    @lazyproperty
+    def pic(self):
+        return self.graphicData.pic
+
 
 class CT_GraphicalObjectData(BaseOxmlElement):
     """
@@ -52,7 +56,7 @@ class CT_GraphicalObjectData(BaseOxmlElement):
 
 class CT_Inline(BaseOxmlElement):
     """
-    ``<w:inline>`` element, container for an inline shape.
+    ``<wp:inline>`` element, container for an inline shape.
     """
     extent = OneAndOnlyOne('wp:extent')
     docPr = OneAndOnlyOne('wp:docPr')
@@ -62,6 +66,10 @@ class CT_Inline(BaseOxmlElement):
     wrapThrough = ZeroOrOne('wp:wrapThrough')
     wrapTight = ZeroOrOne('wp:wrapTight')
     wrapTopAndBottom = ZeroOrOne('wp:wrapTopAndBottom')
+
+    @property
+    def pic(self):
+        return self.graphic.pic
 
     @property
     def has_wrap(self):
@@ -121,7 +129,14 @@ class CT_Drawing(BaseOxmlElement):
     """
     Used for ``w:drawing``
     """
-    anchor = OneAndOnlyOne('wp:anchor')
+    anchor = ZeroOrOne('wp:anchor')
+    inline = ZeroOrOne('w:inline')
+
+    @lazyproperty
+    def child(self):
+        if self.anchor is not None:
+            return self.anchor
+        return self.inline
 
 
 class CT_Anchor(BaseOxmlElement):
@@ -148,6 +163,16 @@ class CT_Anchor(BaseOxmlElement):
             return True
         return False
 
+    @lazyproperty
+    def is_wrapThrough(self):
+        if self.wrapThrough is not None:
+            return True
+        return False
+
+    @lazyproperty
+    def pic(self):
+        return self.graphic.pic
+
 
 class CT_WrapNone(BaseOxmlElement):
     """
@@ -165,6 +190,7 @@ class CT_WrapThrough(BaseOxmlElement):
     """
     Used for ``wp:wrapThrough``
     """
+    wrapText = OptionalAttribute('wrapText', XsdString)
 
 
 class CT_WrapTight(BaseOxmlElement):

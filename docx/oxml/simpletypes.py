@@ -60,7 +60,7 @@ class BaseIntType(BaseSimpleType):
 
     @classmethod
     def convert_from_xml(cls, str_value):
-        return int(str_value)
+        return int(float(str_value))
 
     @classmethod
     def convert_to_xml(cls, value):

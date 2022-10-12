@@ -103,6 +103,18 @@ class Paragraph(Parented):
         return runs
 
     @property
+    def images(self):
+        from ..picture import PictureShape
+        images = []
+        for run in self.runs:
+            if run.drawing_lst:
+                for drawing in run.drawing_lst:
+                    if drawing.child is not None and drawing.child.pic is not None:
+                        images.append(PictureShape(drawing.child.pic, self._parent))
+        return images
+
+
+    @property
     def style(self):
         """
         Read/Write. |_ParagraphStyle| object representing the style assigned

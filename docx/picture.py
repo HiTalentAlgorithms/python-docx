@@ -1,7 +1,6 @@
 from .oxml import CT_Textbox, CT_WpsTxbx, nsmap, CT_Inline, CT_P
 from .section import Section
 from .shared import lazyproperty, Parented
-from .text.paragraph import Paragraph
 from .textbox import TextboxContent
 
 
@@ -29,6 +28,7 @@ class PictureShape(Parented):
     @property
     def paragraph(self):
         try:
+            from .text.paragraph import Paragraph
             if self.parent is not None and isinstance(self.parent.getparent().getparent().getparent(), CT_P):
                 p_ = self.parent.getparent().getparent().getparent()
                 return Paragraph(p_, self._parent)

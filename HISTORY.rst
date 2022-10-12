@@ -2,6 +2,18 @@
 
 Release History
 ---------------
+0.8.48 (2022-10-11)
++++++++++++++++++++
+
+- rect add margin
+
+0.8.47 (2022-10-11)
++++++++++++++++++++
+
+- fix lot of bugs
+- add paragraph images extract
+- add textbox rect extract
+- fix table extract
 
 0.8.46 (2022-09-22)
 +++++++++++++++++++

@@ -112,7 +112,7 @@ class CT_Lvl(BaseOxmlElement):
     lvlJc = ZeroOrOne('w:lvlJc')
     pPr = ZeroOrOne('w:pPr')
     rPr = ZeroOrOne('w:rPr')
-    ilvl = RequiredAttribute('w:ilvl', ST_DecimalNumber)
+    ilvl = ZeroOrOne('w:ilvl', ST_DecimalNumber)
 
 
 class CT_AbstractNum(BaseOxmlElement):

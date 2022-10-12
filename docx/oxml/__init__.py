@@ -189,7 +189,7 @@ from .table import (  # noqa
     CT_TblInd,
     CT_TcBorders,
     CT_TblBorders,
-    CT_BordersAttr
+    CT_BordersAttr, CT_TcMar
 )
 register_element_cls('w:bidiVisual', CT_OnOff)
 register_element_cls('w:gridCol',    CT_TblGridCol)
@@ -201,6 +201,7 @@ register_element_cls('w:tblPr',      CT_TblPr)
 register_element_cls('w:tblStyle',   CT_String)
 register_element_cls('w:tc',         CT_Tc)
 register_element_cls('w:tcPr',       CT_TcPr)
+register_element_cls('w:tcMar',      CT_TcMar)
 register_element_cls('w:tcW',        CT_TblWidth)
 register_element_cls('w:tblW',       CT_TblWidth)
 register_element_cls('w:tr',         CT_Row)

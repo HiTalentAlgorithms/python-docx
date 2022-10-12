@@ -64,7 +64,7 @@ class AbstractNumberingLvl:
         self._index = int(lvl_elm.start.val if lvl_elm.start is not None else 1) - 1
 
     def is_serial(self):
-        if self._lvl_elm.numFmt.val == 'bullet':
+        if self._lvl_elm.numFmt is not None and self._lvl_elm.numFmt.val == 'bullet':
             return False
         return True
 

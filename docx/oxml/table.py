@@ -279,6 +279,18 @@ class CT_BordersAttr(BaseOxmlElement):
     ``<w:top> / <w:start> / <w:bottom> / <w:end> `` element
     """
     val = OptionalAttribute('w:val', ST_String)
+    w = RequiredAttribute('w:w', XsdInt)
+    type = RequiredAttribute('w:type', ST_TblWidth)
+
+    @property
+    def width(self):
+        """
+        Return the EMU length value represented by the combined ``w:w`` and
+        ``w:type`` attributes.
+        """
+        if self.type != 'dxa':
+            return None
+        return Twips(self.w)
 
 
 class CT_TblBorders(BaseOxmlElement):
@@ -818,6 +830,30 @@ class CT_Tc(BaseOxmlElement):
         return self._tbl.tr_lst.index(self._tr)
 
 
+class CT_TcMar(BaseOxmlElement):
+    """
+    ``<w:tcMar>`` element
+    """
+    top = ZeroOrOne('w:top')
+    _start = ZeroOrOne('w:start')
+    _left = ZeroOrOne('w:left')
+    bottom = ZeroOrOne('w:bottom')
+    _end = ZeroOrOne('w:end')
+    _right = ZeroOrOne('w:right')
+
+    @property
+    def left(self):
+        if self._start is None:
+            return self._left
+        return self._start
+
+    @property
+    def right(self):
+        if self._end is None:
+            return self._right
+        return self._end
+
+
 class CT_TcPr(BaseOxmlElement):
     """
     ``<w:tcPr>`` element, defining table cell properties
@@ -834,6 +870,7 @@ class CT_TcPr(BaseOxmlElement):
     vAlign = ZeroOrOne('w:vAlign', successors=_tag_seq[12:])
     shd = ZeroOrOne('w:shd')
     tcBorders = ZeroOrOne('w:tcBorders')
+    tcMar = ZeroOrOne('w:tcMar')
     del _tag_seq
 
     @property

@@ -102,7 +102,10 @@ class PackageReader(object):
             visited_partnames.append(partname)
             reltype = srel.reltype
             part_srels = PackageReader._srels_for(phys_reader, partname)
-            blob = phys_reader.blob_for(partname)
+            try:
+                blob = phys_reader.blob_for(partname)
+            except KeyError:
+                blob = None
             yield (partname, blob, reltype, part_srels)
             next_walker = PackageReader._walk_phys_parts(
                 phys_reader, part_srels, visited_partnames

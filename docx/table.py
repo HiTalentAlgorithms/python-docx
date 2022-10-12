@@ -45,6 +45,12 @@ class Table(Parented):
         return sum([x.width.pt for x in self.columns])
 
     @lazyproperty
+    def width_type(self):
+        if self._tblPr.tblW is not None:
+            return self._tblPr.tblW.type
+        return 'auto'
+
+    @lazyproperty
     def parent_section(self):
         parent = self._element.getparent()
         while parent is not None:
@@ -330,6 +336,18 @@ class _Cell(BlockItemContainer):
         tcPr = self._element.get_or_add_tcPr()
         tcPr.vAlign_val = value
 
+    @lazyproperty
+    def is_auto_width(self):
+        if self.current_table.width_type == 'auto' and self.width is None:
+            return True
+        return False
+
+    @lazyproperty
+    def left_margin(self):
+        if self._tc.tcPr is not None and self._tc.tcPr.tcMar is not None and self._tc.tcPr.tcMar.left is not None:
+            return self._tc.tcPr.tcMar.left.width
+        return None
+
     @property
     def width(self):
         """
@@ -575,3 +593,11 @@ class TablePict(Parented):
     @lazyproperty
     def height(self):
         return self._oval.height
+
+    @property
+    def off_x(self):
+        return 0
+
+    @property
+    def off_y(self):
+        return 0

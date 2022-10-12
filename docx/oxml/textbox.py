@@ -48,7 +48,6 @@ class CT_AC_Choice(BaseOxmlElement):
     drawing = OneAndOnlyOne('w:drawing')
 
 
-
 class CT_WpsTxbx(BaseOxmlElement):
     """
     Used for ``wps:txbx``
@@ -88,16 +87,28 @@ class GroupBaseOxmlElement(BaseOxmlElement):
         if not self.coord_size:
             return 12700
         if self.coord_origin:
-            return self.coord_origin[0] + self.coord_size[0]
+            return self.coord_size[0]
         return self.coord_size[0]
+
+    @lazyproperty
+    def width_origin(self):
+        if self.coord_origin:
+            return self.coord_origin[0]
+        return 0
 
     @lazyproperty
     def height_unit(self):
         if not self.coord_size:
             return 12700
         if self.coord_origin:
-            return self.coord_origin[1] + self.coord_size[1]
+            return self.coord_size[1]
         return self.coord_size[1]
+
+    @lazyproperty
+    def height_origin(self):
+        if self.coord_origin:
+            return self.coord_origin[1]
+        return 0
 
     @lazyproperty
     def position(self):
@@ -166,25 +177,52 @@ class GroupBaseOxmlElement(BaseOxmlElement):
                    self.parent.mso_position_horizontal_relative
         return self.style.get('mso_position_horizontal_relative') or self.drawing_horizontal_relative_from
 
-    def _get_width_value(self, key):
-        if value := self.style.get(key):
-            if value.endswith('pt'):
-                return float(value[:-2])
+    @lazyproperty
+    def z_index(self):
+        if isinstance(self.parent, GroupBaseOxmlElement):
+            return self.style.get('z_index') or self.parent.z_index
+        return self.style.get('z_index')
+
+    @lazyproperty
+    def visible(self):
+        z_index = self.z_index
+        if z_index is not None and float(z_index) > 0:
+            return True
+        return False
+
+    def _get_pt_value(self, value):
+        if value.endswith('pt'):
+            return float(value[:-2])
+        elif value.endswith('in'):
+            return float(value[:-2]) * 72
+        elif value.endswith('cm'):
+            return float(value[:-2]) * 3600 / 127
+        elif value.endswith('mm'):
+            return float(value[:-2]) * 360 / 127
+
+    def _get_width_value(self, key, is_offset=False):
+        value = self.style.get(key)
+        if value is not None:
+            if value.endswith(('pt', 'in', 'cm', 'mm')):
+                return self._get_pt_value(value)
             else:
                 if isinstance(self.parent, GroupBaseOxmlElement):
-                    return float(value) * self.parent.width / self.parent.width_unit
+                    _v = (float(value) - self.parent.width_origin) if is_offset else float(value)
+                    return _v * self.parent.width / self.parent.width_unit
                 else:
                     return 0
         else:
             return 0
 
-    def _get_height_value(self, key):
-        if value := self.style.get(key):
-            if value.endswith('pt'):
-                return float(value[:-2])
+    def _get_height_value(self, key, is_offset=False):
+        value = self.style.get(key)
+        if value is not None:
+            if value.endswith(('pt', 'in', 'cm', 'mm')):
+                return self._get_pt_value(value)
             else:
                 if isinstance(self.parent, GroupBaseOxmlElement):
-                    return float(value) * self.parent.height / self.parent.height_unit
+                    _v = (float(value) - self.parent.height_origin) if is_offset else float(value)
+                    return _v * self.parent.height / self.parent.height_unit
                 else:
                     return 0
         else:
@@ -200,11 +238,11 @@ class GroupBaseOxmlElement(BaseOxmlElement):
 
     @lazyproperty
     def left(self):
-        return self._get_width_value('left')
+        return self._get_width_value('left', True)
 
     @lazyproperty
     def top(self):
-        return self._get_height_value('top')
+        return self._get_height_value('top', True)
 
     @lazyproperty
     def margin_left(self):

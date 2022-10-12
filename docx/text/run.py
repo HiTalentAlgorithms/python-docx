@@ -181,6 +181,10 @@ class Run(Parented):
         """
         return self.font.underline
 
+    @property
+    def drawing_lst(self):
+        return self._r.drawing_lst
+
     @underline.setter
     def underline(self, value):
         self.font.underline = value
