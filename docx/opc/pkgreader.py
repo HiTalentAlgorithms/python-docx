@@ -7,6 +7,8 @@ Provides a low-level, read-only API to a serialized Open Packaging Convention
 
 from __future__ import absolute_import
 
+from zipfile import BadZipFile
+
 from .constants import RELATIONSHIP_TARGET_MODE as RTM
 from .oxml import parse_xml
 from .packuri import PACKAGE_URI, PackURI
@@ -104,7 +106,7 @@ class PackageReader(object):
             part_srels = PackageReader._srels_for(phys_reader, partname)
             try:
                 blob = phys_reader.blob_for(partname)
-            except KeyError:
+            except (KeyError, BadZipFile):
                 blob = None
             yield (partname, blob, reltype, part_srels)
             next_walker = PackageReader._walk_phys_parts(

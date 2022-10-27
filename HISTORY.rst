@@ -2,6 +2,12 @@
 
 Release History
 ---------------
+0.8.49 (2022-10-21)
++++++++++++++++++++
+
+- fix zipfile crash
+- fix section default type
+
 0.8.48 (2022-10-11)
 +++++++++++++++++++
 

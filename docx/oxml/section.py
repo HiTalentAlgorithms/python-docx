@@ -309,7 +309,7 @@ class CT_SectPr(BaseOxmlElement):
         """
         type = self.type
         if type is None or type.val is None:
-            if self.cols is not None:
+            if self.cols is not None and self.cols.num != 1:
                 return WD_SECTION_START.CONTINUOUS
             return WD_SECTION_START.NEW_PAGE
         return type.val
