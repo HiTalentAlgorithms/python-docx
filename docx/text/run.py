@@ -9,8 +9,15 @@ from __future__ import absolute_import, print_function, unicode_literals
 from ..enum.style import WD_STYLE_TYPE
 from ..enum.text import WD_BREAK
 from .font import Font
+from ..oxml import nsmap
 from ..shape import InlineShape
 from ..shared import Parented
+
+RUN_COMPARE_PROPERTIES = {
+    f"{{{nsmap['w']}}}{v}" for v in
+    ('rStyle', 'rFonts', 'b', 'bCs', 'i', 'iCs', 'caps', 'smallCaps', 'strike', 'dstrike', 'outline', 'shadow',
+     'emboss', 'imprint', 'noProof', 'snapToGrid', 'vanish', 'webHidden', 'color',
+     'sz', 'highlight', 'u', 'vertAlign', 'rtl', 'cs', 'specVanish', 'oMath')}
 
 
 class Run(Parented):
@@ -188,6 +195,19 @@ class Run(Parented):
     @underline.setter
     def underline(self, value):
         self.font.underline = value
+
+    def compare_other_properties(self, other):
+        if self._r.rPr is None and other._r.rPr is None:
+            return True
+        if self._r.rPr is not None and other._r.rPr is not None:
+            if len(self._r.rPr) != len(other._r.rPr):
+                return False
+            for i, value in enumerate(self._r.rPr):
+                if value.tag in RUN_COMPARE_PROPERTIES and value.attrib != other._r.rPr[i].attrib:
+                    return False
+        else:
+            return False
+        return True
 
 
 class _Text(object):

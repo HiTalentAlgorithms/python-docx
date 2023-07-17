@@ -243,6 +243,10 @@ class ST_HexColor(BaseStringType):
     def convert_from_xml(cls, str_value):
         if str_value == 'auto':
             return ST_HexColorAuto.AUTO
+        if str_value == '0':
+            return RGBColor.from_string('000000')
+        if len(str_value) == 2:  # e.g. "ff"
+            return RGBColor.from_string(str_value * 3)
         return RGBColor.from_string(str_value)
 
     @classmethod

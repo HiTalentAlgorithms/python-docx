@@ -2,6 +2,17 @@
 
 Release History
 ---------------
+0.8.51 (2023-07-17)
++++++++++++++++++++
+
+- Fixed HEX color value "ff"
+
+
+0.8.50 (2022-11-22)
++++++++++++++++++++
+
+- Run add ``compare_other_properties`` function
+
 0.8.49 (2022-10-21)
 +++++++++++++++++++
 

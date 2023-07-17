@@ -2,7 +2,7 @@
 
 from docx.api import Document  # noqa
 
-__version__ = "0.8.49"
+__version__ = "0.8.51"
 
 
 # register custom Part classes with opc package reader
